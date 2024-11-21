@@ -1,4 +1,3 @@
-// src/pages/VerifyUserPage.jsx
 import React from 'react';
 
 const VerifyUserPage = () => {

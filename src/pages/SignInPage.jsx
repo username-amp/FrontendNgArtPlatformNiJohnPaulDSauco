@@ -1,4 +1,3 @@
-// src/pages/SignInPage.jsx
 import React, { useState } from 'react';
 
 const SignInPage = () => {
