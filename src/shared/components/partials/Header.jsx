@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaSearch, FaAngleDown } from 'react-icons/fa';
 import { BsBell } from 'react-icons/bs';
+import { MdOutlineMenu } from 'react-icons/md';
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   return (
     <div className="navbar bg-transparent text-white p-4">
       <div className="content flex items-center justify-between max-w-full w-full">
+        {/* Menu Icon for Smaller Screens */}
+        <button
+          className="menu-icon md:hidden sm:mr-5 text-2xl text-white"
+          onClick={toggleSidebar}
+        >
+          <MdOutlineMenu />
+        </button>
+
         <div className="flex items-center gap-2 w-full pr-3">
           <FaSearch className="text-amber-50 text-xl" />
           <input

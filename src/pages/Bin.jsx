@@ -2,7 +2,7 @@ import React from 'react'
 
 const Bin = () => {
   return (
-    <div>Bin</div>
+    <div className='h-screen'>Bin</div>
   )
 }
 

@@ -1,12 +1,15 @@
 import React from 'react';
+import CategoriesHome from '../components/CategoriesHome';
+import CreatePostForm from '../components/CreatePostForm';
 
-const HomePage = () => {
+const HomePage = ({ isFormOpen, closeForm }) => {
   return (
-    <div>
-      <h1>Welcome Home!</h1>
-      <p>This is the home page for logged-in users.</p>
+    <div className="relative">
+      <CategoriesHome />
+      {isFormOpen && <CreatePostForm closeForm={closeForm} />}
     </div>
   );
 };
 
 export default HomePage;
+
