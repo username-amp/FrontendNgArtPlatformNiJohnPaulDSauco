@@ -38,7 +38,7 @@ const CategoriesHome = () => {
         {shuffledCategories.map((category) => (
           <button
             key={category._id}
-            className="p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="p-3 bg-gray-800 text-white rounded-md hover:bg-blue-600"
           >
             {category.title}
           </button>
