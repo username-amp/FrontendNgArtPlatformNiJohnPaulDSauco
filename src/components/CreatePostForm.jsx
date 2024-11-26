@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 
+
+
 const CreatePostForm = ({ closeForm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [files, setFiles] = useState([]);
@@ -84,6 +86,7 @@ const CreatePostForm = ({ closeForm }) => {
 
       if (response.ok && data.status) {
         console.log("Post created successfully:", data);
+      
         closeForm();
       } else {
         setError(data.message || "Error creating post.");

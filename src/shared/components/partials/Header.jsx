@@ -2,12 +2,33 @@ import React, { useState } from 'react';
 import { FaSearch, FaAngleDown } from 'react-icons/fa';
 import { BsBell } from 'react-icons/bs';
 import { MdOutlineMenu } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';  
+import Cookies from 'js-cookie';  
 
 const Header = ({ toggleSidebar }) => {
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const navigate = useNavigate(); 
+
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    Cookies.remove("user_id");
+  
+    console.log('User logged out');
+    navigate('/signin');  
+  };
+
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <div className="navbar bg-transparent text-white p-4">
       <div className="content flex items-center justify-between max-w-full w-full">
-        {/* Menu Icon for Smaller Screens */}
+
         <button
           className="menu-icon md:hidden sm:mr-5 text-2xl text-white"
           onClick={toggleSidebar}
@@ -29,9 +50,24 @@ const Header = ({ toggleSidebar }) => {
             <BsBell className="text-amber-50 text-xl" />
           </button>
           <span className="profile text-sm font-medium">profile</span>
-          <button className="dropDown flex items-center">
+          <button
+            className="dropDown flex items-center"
+            onClick={toggleDropdown}
+          >
             <FaAngleDown className="text-amber-50 text-lg" />
           </button>
+
+  
+          {isDropdownOpen && (
+            <div className="absolute top-12 right-4 bg-gray-800 text-white p-3 rounded-lg shadow-lg z-50">
+              <button
+                className="block text-sm px-4 py-2 hover:bg-gray-700 rounded"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
