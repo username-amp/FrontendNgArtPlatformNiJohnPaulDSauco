@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 
-
-
 const CreatePostForm = ({ closeForm }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [files, setFiles] = useState([]);
