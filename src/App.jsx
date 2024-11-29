@@ -14,6 +14,7 @@ import Settings from './pages/Settings';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import RecoverPasswordPage from './pages/RecoverPasswordPage';
+import PostPage from './components/PostPage';
 
 const App = () => {
   return (
@@ -30,7 +31,7 @@ const App = () => {
         </Route>
 
         <Route element={<RootLayout />}>
-         
+          <Route path="/post/:postId" element={<PostPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/gallery" element={<Gallery />} />

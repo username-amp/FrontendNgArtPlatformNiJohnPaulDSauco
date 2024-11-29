@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ViewPostPopup from './ViewPostPopup';
+import { useNavigate } from 'react-router-dom';
 
 const ArtsHome = () => {
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const getTokenFromCookies = () => {
     const cookies = document.cookie.split('; ');
@@ -43,52 +42,39 @@ const ArtsHome = () => {
     fetchPosts();
   }, []);
 
-  const handlePostClick = (post) => {
-    setSelectedPost(post);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedPost(null);
-    setIsModalOpen(false);
+  const handlePostClick = (postId) => {
+    navigate(`/post/${postId}`);
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+    <div className="columns-2 sm:columns-3 lg:columns-7 gap-0 px-4">
       {posts.map((post) => (
         <div
           key={post._id}
-          className="p-4 bg-white shadow-md rounded-lg flex flex-col items-center cursor-pointer"
-          onClick={() => handlePostClick(post)}
+          className="relative p-1 bg-white shadow-md rounded-lg cursor-pointer overflow-hidden group"
+          onClick={() => handlePostClick(post._id)}
         >
-          <div
-            className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-full text-xl font-bold text-white"
-            style={{ backgroundColor: '#2d3748' }}
-          >
-            {post.author_id?.username.charAt(0).toUpperCase()}
-          </div>
-          <h2 className="text-lg font-semibold mt-2 text-center">{post.title}</h2>
-          <p className="text-sm text-gray-500 text-center">{post.description}</p>
           {post.image_url?.length > 0 && (
-            <div className="mt-2">
-              {post.image_url.map((image, index) => (
-                <img
-                  key={index}
-                  src={`http://localhost:8002${image}`}
-                  alt={post.title}
-                  className="w-full h-auto max-h-40 rounded-md object-cover mt-2"
-                />
-              ))}
-            </div>
+            <img
+              src={`http://localhost:8002${post.image_url[0]}`}
+              alt={post.title}
+              className="w-full rounded-md object-contain group-hover:opacity-30 transition-opacity duration-300"
+            />
           )}
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-80"
+          >
+            <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-full text-xl font-bold text-black mb-2">
+              {post.author_id?.username?.charAt(0)?.toUpperCase() ||
+                post.author_id?.firstname?.charAt(0)?.toUpperCase() ||
+                '?'}
+            </div>
+            <span className="text-white text-xl font-semibold">
+              {post.author_id?.username || post.author_id?.firstname || 'Unknown'}
+            </span>
+          </div>
         </div>
       ))}
-
-      <ViewPostPopup
-        post={selectedPost}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      />
     </div>
   );
 };

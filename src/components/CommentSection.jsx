@@ -71,18 +71,21 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
 
   return (
     <div className="mt-5">
-      <h3 className="text-lg font-semibold mb-3">Comments</h3>
+      <h3 className="text-lg font-semibold mb-3 text-gray-900">Comments</h3>
       <div className="space-y-3 mb-5">
         {comments.length === 0 ? (
-          <p>No comments yet.</p>
+          <p className="text-gray-500">No comments yet.</p>
         ) : (
           comments.map((comment, index) => (
-            <div key={index} className="p-3 bg-gray-100 rounded-md shadow-sm">
-              <p className="text-gray-700">{comment?.content || "No content available"}</p>
-              <p className="text-sm text-gray-500">
-                By {comment?.authorUsername || "Unknown"} on{" "}
-                {comment?.createdAt ? new Date(comment.createdAt).toLocaleString() : "Unknown date"}
-              </p>
+            <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg shadow-md">
+              <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0"></div> {/* Avatar placeholder */}
+              <div>
+                <p className="text-sm font-medium text-gray-800">{comment?.authorUsername || "Unknown"}</p>
+                <p className="text-gray-600">{comment?.content || "No content available"}</p>
+                <p className="text-xs text-gray-500">
+                  {comment?.createdAt ? new Date(comment.createdAt).toLocaleString() : "Unknown date"}
+                </p>
+              </div>
             </div>
           ))
         )}
@@ -94,17 +97,17 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
           value={commentContent}
           onChange={(e) => setCommentContent(e.target.value)}
           placeholder="Write a comment..."
-          className="flex-grow p-2 border rounded-md shadow-sm"
+          className="flex-grow p-2 bg-gray-100 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           onClick={handleAddComment}
           disabled={isLoading}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 disabled:opacity-50"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
         >
-          {isLoading ? "Posting..." : "Comment"}
+          {isLoading ? "Posting..." : "Post"}
         </button>
       </div>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
     </div>
   );
 };

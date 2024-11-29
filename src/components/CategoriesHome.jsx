@@ -20,7 +20,6 @@ const CategoriesHome = () => {
         const data = await response.json();
         setCategories(data);
 
-  
         const shuffled = data.sort(() => 0.5 - Math.random()).slice(0, 4);
         setShuffledCategories(shuffled);
       } catch (err) {
@@ -33,14 +32,15 @@ const CategoriesHome = () => {
 
   return (
     <div>
-      {error && <p className="text-red-500">Error: {error}</p>}
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+      {error && <p className="text-red-500">{error}</p>}
+
+      <div className="grid gap-6 grid-cols-2 md:grid-cols-4">
         {shuffledCategories.map((category) => (
           <button
             key={category._id}
-            className="p-3 bg-gray-800 text-white rounded-md hover:bg-blue-600"
+            className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
           >
-            {category.title}
+            <span className="text-lg font-semibold">{category.title}</span>
           </button>
         ))}
       </div>

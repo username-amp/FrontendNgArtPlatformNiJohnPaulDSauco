@@ -15,21 +15,13 @@ const RootLayout = () => {
   const closeCreateForm = () => setIsCreateFormOpen(false);
 
   return (
-    <div className="flex h-screen bg-gray-900">
-   
-      <Sidebar
-        isOpen={isSidebarOpen}
-        closeSidebar={closeSidebar}
-        openCreateForm={toggleCreateForm}
-      />
-
- 
-      <div className="flex-1 flex flex-col w-full md:ml-56 lg:ml-64">
+    <div className="flex h-screen bg-white">
+      <div className="flex-1 flex flex-col w-full ">
         <header>
           <Header toggleSidebar={toggleSidebar} />
         </header>
 
-        <main className="flex-1 bg-white p-4 w-full relative">
+        <main className="flex-1 bg-white  w-full relative">
           <Outlet />
        
           {isCreateFormOpen && (

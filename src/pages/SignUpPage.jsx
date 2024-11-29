@@ -10,6 +10,7 @@ const SignUpPage = () => {
   });
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,6 +20,8 @@ const SignUpPage = () => {
       return;
     }
     setError(null);
+
+    setIsLoading(true);
 
     try {
       const signUpResponse = await fetch("http://localhost:8002/api/v2/auth/signup", {
@@ -59,18 +62,34 @@ const SignUpPage = () => {
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign Up</h1>
+      <div className="w-full max-w-md p-8 bg-gray-100 rounded-xl ">
+        {/* Logo */}
+        <div className="mb-6 flex justify-center">
+          <img
+            src="/src/assets/images/MUZEUMsignin.png"
+            alt="MUZEUM Logo"
+            className="w-[40%] max-w-xs"
+          />
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
+          Create Your Account
+        </h1>
+
+        {/* Sign-up Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             placeholder="Username"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.username}
             onChange={(e) => setForm({ ...form, username: e.target.value })}
             required
@@ -78,7 +97,7 @@ const SignUpPage = () => {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
@@ -86,7 +105,7 @@ const SignUpPage = () => {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
@@ -94,20 +113,66 @@ const SignUpPage = () => {
           <input
             type="password"
             placeholder="Confirm Password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.confirmPassword}
             onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
             required
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-black text-white p-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300"
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? (
+              <span className="flex justify-center items-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                </svg>
+                Signing Up...
+              </span>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
+
+        {/* Message Display */}
         {error && <p className="text-center text-red-500 mt-4">{error}</p>}
         {message && <p className="text-center text-green-500 mt-4">{message}</p>}
+
+        {/* Additional Links / Options */}
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-sm">
+            Already have an account?{" "}
+            <a href="/signin" className="text-blue-600 hover:underline">
+              Sign In
+            </a>
+          </p>
+        </div>
+
+        {/* Legal & Policy */}
+        <div className="mt-6 text-center text-xs text-gray-500">
+          <p>
+            By signing up, you agree to our{" "}
+            <a href="/terms-of-service" className="text-blue-600 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/privacy-policy" className="text-blue-600 hover:underline">
+              Privacy Policy
+            </a>.
+          </p>
+        </div>
       </div>
     </div>
   );

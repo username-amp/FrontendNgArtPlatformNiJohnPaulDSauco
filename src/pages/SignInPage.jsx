@@ -27,18 +27,30 @@ const SignInPage = () => {
       setMessage("An error occurred. Please try again later.");
     }
   };
-  
-  
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign In</h1>
+    <div className="flex items-center justify-center min-h-screen bg-white">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl  ">
+        {/* Logo */}
+        <div className="mb-6 flex justify-center">
+          <img
+            src="/src/assets/images/MUZEUMsignin.png"
+            alt="MUZEUM Logo"
+            className="w-[50%] max-w-xs"
+          />
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
+          Welcome Back to Your Account!
+        </h1>
+
+        {/* Sign-in Form */}
         <form onSubmit={handleSignIn} className="space-y-4">
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
@@ -46,19 +58,61 @@ const SignInPage = () => {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-black text-white p-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300"
           >
             Sign In
           </button>
         </form>
+
+        {/* Message Display */}
         {message && <p className="text-center text-red-500 mt-4">{message}</p>}
+
+        {/* Additional Links / Options */}
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-sm">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-blue-600 hover:underline">
+              Sign Up
+            </a>
+          </p>
+          <p className="text-gray-600 text-sm mt-2">
+            Forgot your password?{" "}
+            <a href="/reset-password" className="text-blue-600 hover:underline">
+              Reset Password
+            </a>
+          </p>
+        </div>
+
+        {/* Social Media Login (optional) */}
+        <div className="mt-6 flex justify-center space-x-4">
+          <button className="p-3 border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all">
+            <img src="/path/to/google-logo.png" alt="Google" className="w-6 h-6" />
+          </button>
+          <button className="p-3 border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all">
+            <img src="/path/to/facebook-logo.png" alt="Facebook" className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Legal & Policy */}
+        <div className="mt-6 text-center text-xs text-gray-500">
+          <p>
+            By signing in, you agree to our{" "}
+            <a href="/terms-of-service" className="text-blue-600 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/privacy-policy" className="text-blue-600 hover:underline">
+              Privacy Policy
+            </a>.
+          </p>
+        </div>
       </div>
     </div>
   );

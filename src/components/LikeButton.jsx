@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { HeartIcon } from "@heroicons/react/24/solid";
 
 const LikeButton = ({ postId, postLikes, authorId }) => {
   const [isLiking, setIsLiking] = useState(false);
@@ -82,14 +83,17 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
   };
 
   return (
-    <div>
+    <div className="flex items-center gap-2">
       <button
         onClick={isLiked ? handleUnlike : handleLike}
-        className={`text-xl transition-all ${isLiked ? "text-red-500" : "text-gray-700"}`}
+        className={`transition-all ${isLiked ? "text-red-500" : "text-gray-500"}`}
         disabled={isLiking || isUnliking}
       >
-        {isLiked ? "❤️ Liked" : "🤍 Like"} ({likesCount})
+        <HeartIcon className="w-6 h-6" />
       </button>
+      <p className={`text-sm ${isLiked ? "text-red-500" : "text-gray-700"}`}>
+        {likesCount} {likesCount === 1 ? "Like" : "Likes"}
+      </p>
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );

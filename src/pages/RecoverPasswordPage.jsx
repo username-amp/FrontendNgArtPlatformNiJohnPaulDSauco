@@ -1,79 +1,82 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const RecoverPasswordPage = () => {
-  const [form, setForm] = useState({
-    email: "",
-    code: "",
-    password: "",
-  });
+const ResetPasswordPage = () => {
+  const [form, setForm] = useState({ password: "", confirmPassword: "" });
   const [message, setMessage] = useState(null);
-  const navigate = useNavigate();
 
-  const handleRecoverPassword = async (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
-    setMessage(null);
+    if (form.password !== form.confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
 
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/recover-password", {
+      const response = await fetch("http://localhost:8002/api/v2/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
       const result = await response.json();
-
       if (response.ok) {
-        setMessage("Password successfully updated. Redirecting to login...");
-        setTimeout(() => navigate("/signin"), 2000);
+        setMessage("Password reset successful! You can now sign in.");
       } else {
-        setMessage(result.error || "Recovery failed. Try again.");
+        setMessage(result.error || "Password reset failed. Try again.");
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again.");
+      setMessage("An error occurred. Please try again later.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Recover Password</h1>
-        <form onSubmit={handleRecoverPassword} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
+    <div className="flex items-center justify-center min-h-screen bg-white">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl">
+        {/* Logo */}
+        <div className="mb-6 flex justify-center">
+          <img
+            src="/src/assets/images/MUZEUMsignin.png"
+            alt="MUZEUM Logo"
+            className="w-[50%] max-w-xs"
           />
-          <input
-            type="text"
-            placeholder="Enter recovery code"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-            value={form.code}
-            onChange={(e) => setForm({ ...form, code: e.target.value })}
-            required
-          />
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
+          Reset Your Password
+        </h1>
+
+        {/* Reset Password Form */}
+        <form onSubmit={handleResetPassword} className="space-y-4">
           <input
             type="password"
-            placeholder="Enter new password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            placeholder="New Password"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
+            value={form.confirmPassword}
+            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            required
+          />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-black text-white p-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300"
           >
-            Recover Password
+            Reset Password
           </button>
         </form>
-        {message && <p className="text-center mt-4">{message}</p>}
+
+        {/* Message Display */}
+        {message && <p className="text-center text-red-500 mt-4">{message}</p>}
       </div>
     </div>
   );
 };
 
-export default RecoverPasswordPage;
+export default ResetPasswordPage;

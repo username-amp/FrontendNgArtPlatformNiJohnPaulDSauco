@@ -6,7 +6,6 @@ import ArtsHome from '../components/ArtsHome';
 const HomePage = ({ isFormOpen, closeForm }) => {
   return (
     <div className="relative">
-      <CategoriesHome />
       {isFormOpen && <CreatePostForm closeForm={closeForm} />}
       <ArtsHome />
     </div>

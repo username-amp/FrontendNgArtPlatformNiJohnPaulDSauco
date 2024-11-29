@@ -1,8 +1,11 @@
 import React from 'react'
+import Test from '../components/Test'
 
 const Gallery = () => {
   return (
-    <div>Gallery</div>
+    <div>
+        <Test />
+    </div>
   )
 }
 

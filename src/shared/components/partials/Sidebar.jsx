@@ -9,77 +9,90 @@ import { CiSettings } from 'react-icons/ci';
 const Sidebar = ({ isOpen, closeSidebar, openCreateForm }) => {
   return (
     <div
-      className={`fixed top-0 left-0 h-full bg-gray-900 text-white shadow-lg transition-transform transform ${
+      className={`fixed top-0 left-0 h-full bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg transition-all transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } md:translate-x-0 w-64`}
+      } md:translate-x-0 w-64 rounded-r-3xl`}
     >
-      <div className="p-4 flex flex-col h-full">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-bold">MUZEUM</h1>
-          <button className="text-xl md:hidden" onClick={closeSidebar}>
+      <div className="p-6 flex flex-col h-full">
+        {/* Sidebar Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-extrabold tracking-wider">MUZEUM</h1>
+          <button className="text-2xl md:hidden" onClick={closeSidebar}>
             ✖
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 flex-grow">
-          <button
-            className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4"
-            onClick={openCreateForm}
-          >
-            Create
-          </button>
+        {/* Create Button */}
+        <button
+          className="bg-white text-gray-900 shadow-lg px-4 py-3 rounded-lg hover:bg-blue-600 mt-4 transition duration-300 ease-in-out"
+          onClick={openCreateForm}
+        >
+          Create
+        </button>
+
+        {/* Navigation Links */}
+        <div className="flex flex-col gap-8 flex-grow mt-6">
           <NavLink
             to="/home"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-base font-medium hover:text-red-400 ${
-                isActive ? 'text-red-400' : ''
+              `flex items-center gap-4 text-lg font-semibold hover:text-yellow-400 transition duration-200 ease-in-out ${
+                isActive ? 'text-yellow-400' : 'text-gray-200'
               }`
             }
           >
-            <GoHome /> <span>Home</span>
+            <GoHome className="text-2xl" />
+            <span>Home</span>
           </NavLink>
+
           <NavLink
             to="/gallery"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-base font-medium hover:text-red-400 ${
-                isActive ? 'text-red-400' : ''
+              `flex items-center gap-4 text-lg font-semibold hover:text-yellow-400 transition duration-200 ease-in-out ${
+                isActive ? 'text-yellow-400' : 'text-gray-200'
               }`
             }
           >
-            <GrGallery /> <span>Gallery</span>
+            <GrGallery className="text-2xl" />
+            <span>Gallery</span>
           </NavLink>
+
           <NavLink
             to="/favorites"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-base font-medium hover:text-red-400 ${
-                isActive ? 'text-red-400' : ''
+              `flex items-center gap-4 text-lg font-semibold hover:text-yellow-400 transition duration-200 ease-in-out ${
+                isActive ? 'text-yellow-400' : 'text-gray-200'
               }`
             }
           >
-            <CiStar /> <span>Favorites</span>
+            <CiStar className="text-2xl" />
+            <span>Favorites</span>
           </NavLink>
+
           <NavLink
             to="/bin"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-base font-medium hover:text-red-400 ${
-                isActive ? 'text-red-400' : ''
+              `flex items-center gap-4 text-lg font-semibold hover:text-yellow-400 transition duration-200 ease-in-out ${
+                isActive ? 'text-yellow-400' : 'text-gray-200'
               }`
             }
           >
-            <FaRegTrashAlt /> <span>Bin</span>
+            <FaRegTrashAlt className="text-2xl" />
+            <span>Bin</span>
           </NavLink>
         </div>
 
-        <div className="mt-auto">
+        {/* Settings Link */}
+        <div className="mt-auto mb-6">
           <NavLink
             to="/settings"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-base font-medium hover:text-red-400 ${
-                isActive ? 'text-red-400' : ''
+              `flex items-center gap-4 text-lg font-semibold hover:text-yellow-400 transition duration-200 ease-in-out ${
+                isActive ? 'text-yellow-400' : 'text-gray-200'
               }`
             }
           >
-            <CiSettings /> <span>Settings</span>
+            <CiSettings className="text-2xl" />
+            <span>Settings</span>
           </NavLink>
         </div>
       </div>
