@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import LikeButton from './LikeButton';
 import CommentSection from './CommentSection';
 import SavePostButton from './SavePostButton';
+import RelatedPosts from './RelatedPosts';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -52,19 +53,19 @@ const PostPage = () => {
     return <div className="text-center text-xl">Loading...</div>;
   }
 
-  const { username, profile_picture } = post.author_id || {};
+  const { username, profile_picture, category } = post.author_id || {};
 
   return (
     <div className="max-w-screen-xl mx-auto p-8"> {/* Larger page layout */}
       {/* Back Button with left arrow icon */}
       <button
         className="absolute top-4 left-4 text-gray-600 hover:text-black"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/home")}
       >
         <ArrowLeftIcon className="w-10 h-10" />
       </button>
 
-      <div className="bg-white rounded-xl shadow-2xl p-8 relative overflow-hidden"> {/* Larger padding and shadow */}
+      <div className="bg-white  p-8 relative overflow-hidden"> {/* Larger padding and shadow */}
         <div className="flex flex-col md:flex-row">
           {/* Left: Image Section */}
           <div className="w-full md:w-1/2 flex items-center justify-center  p-4">
@@ -125,7 +126,15 @@ const PostPage = () => {
             </div>
           </div>
         </div>
+
       </div>
+
+      
+      <div className="mt-8">
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">Related Posts</h3>
+        <RelatedPosts categoryId={post.category} currentPostId={post._id} />
+      </div>
+ 
     </div>
   );
 };

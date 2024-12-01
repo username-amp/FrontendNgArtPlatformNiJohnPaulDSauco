@@ -18,6 +18,7 @@ const RootLayout = () => {
     <div className="flex h-screen bg-white">
       <div className="flex-1 flex flex-col w-full ">
         <header>
+          
           <Header toggleSidebar={toggleSidebar} />
         </header>
 
