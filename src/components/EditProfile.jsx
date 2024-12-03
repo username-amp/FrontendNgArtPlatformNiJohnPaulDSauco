@@ -54,7 +54,7 @@ const EditProfile = () => {
       );
       if (response.data.status) {
         alert('Profile updated successfully!');
-        navigate('/settings');
+        navigate('/settings/edit-profile');
       }
     } catch (err) {
       console.error('Error updating profile:', err);

@@ -84,7 +84,7 @@ const SignInPage = () => {
           </p>
           <p className="text-gray-600 text-sm mt-2">
             Forgot your password?{" "}
-            <a href="/reset-password" className="text-blue-600 hover:underline">
+            <a href="/forgot-password" className="text-blue-600 hover:underline">
               Reset Password
             </a>
           </p>

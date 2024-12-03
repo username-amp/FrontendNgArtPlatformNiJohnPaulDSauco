@@ -6,6 +6,7 @@ import LikeButton from './LikeButton';
 import CommentSection from './CommentSection';
 import SavePostButton from './SavePostButton';
 import RelatedPosts from './RelatedPosts';
+import FollowButton from './FollowButton';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -24,6 +25,7 @@ const PostPage = () => {
   };
 
   useEffect(() => {
+
     const fetchPost = async () => {
       const token = getTokenFromCookies();
       if (!token) {
@@ -91,6 +93,10 @@ const PostPage = () => {
               <SavePostButton
                 postId={post._id}
                 userId={post.author_id?._id || post.author_id}
+              />
+
+              <FollowButton
+                authorId={post.author_id?._id || post.author_id}
               />
             </div>
 

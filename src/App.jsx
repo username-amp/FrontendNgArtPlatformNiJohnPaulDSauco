@@ -17,6 +17,7 @@ import EditProfile from './components/EditProfile';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import RecoverPasswordPage from './pages/RecoverPasswordPage';
 import PostPage from './components/PostPage';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
   return (
@@ -38,11 +39,12 @@ const App = () => {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/bin" element={<Bin />} />
+          <Route path="/profile" element={<ProfilePage />} /> 
 
         </Route>
 
         <Route element={<SettingsLayout />}>
-          <Route path="/settings" element={<Settings />} />
+         
           <Route path="/settings/change-password" element={<ChangePasswordPage />} />
           <Route path="/settings/edit-profile" element={<EditProfile />} />
         </Route>

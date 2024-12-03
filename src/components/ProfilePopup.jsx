@@ -13,7 +13,6 @@ const ProfilePopup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Decode the JWT token from cookies
     const token = Cookies.get("token");
     if (token) {
       try {
@@ -47,8 +46,8 @@ const ProfilePopup = () => {
       </button>
 
       {isProfileOpen && (
-        <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg p-4 w-60 z-50">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-72 z-50">
+          <div className="flex items-center gap-4 mb-4 border-2 border-gray-200 rounded-lg p-2">
             {userData.profile_picture ? (
               <img
                 src={userData.profile_picture}
@@ -56,7 +55,7 @@ const ProfilePopup = () => {
                 className="w-12 h-12 rounded-full object-cover"
               />
             ) : (
-              <div className="w-12 h-12 flex items-center justify-center bg-gray-300 text-xl font-bold rounded-full">
+              <div className="w-12 h-12 flex items-center justify-center bg-gray-300 text-xl font-bold rounded-full p-4">
                 {userData.username[0]?.toUpperCase()}
               </div>
             )}
@@ -74,7 +73,7 @@ const ProfilePopup = () => {
             </li>
             <li
               className="py-2 px-4 hover:bg-gray-100 rounded-lg cursor-pointer"
-              onClick={() => navigate("/settings")}
+              onClick={() => navigate("/settings/edit-profile")}
             >
               Settings
             </li>

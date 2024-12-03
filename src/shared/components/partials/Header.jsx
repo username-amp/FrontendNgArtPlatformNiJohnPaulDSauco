@@ -113,7 +113,7 @@ const Header = ({ toggleSidebar }) => {
   return (
     <div className="flex flex-col w-full bg-white">
       {/* Top Section */}
-      <div className="relative flex justify-center items-center w-full bg-white shadow-md p-6 rounded-lg">
+      <div className="relative flex justify-center items-center w-full bg-white  p-6 rounded-lg">
         {/* Logged-in User Greeting */}
         <div className="absolute left-6 text-md font-bold text-white whitespace-nowrap bg-black p-3 rounded-full">
           Hi, {user.username}!

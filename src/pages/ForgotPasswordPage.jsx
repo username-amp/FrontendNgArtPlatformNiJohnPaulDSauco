@@ -7,7 +7,7 @@ const ForgotPasswordPage = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/forgot-password", {
+      const response = await fetch("http://localhost:8002/api/v2/auth/forgot-password-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
