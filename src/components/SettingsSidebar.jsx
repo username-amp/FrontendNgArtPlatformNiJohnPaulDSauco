@@ -1,9 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 
 const SettingsSidebar = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-64 bg-gray-800 text-white h-full p-4">
+      {/* Back Button */}
+      <div 
+        className="flex items-center mb-6 cursor-pointer hover:text-gray-400" 
+        onClick={() => navigate('/home')}
+      >
+        <ArrowLeftIcon className="w-5 h-5 mr-2" />
+        <span>Back to Home</span>
+      </div>
+
       <h2 className="text-lg font-semibold mb-4">Account Settings</h2>
       <ul className="space-y-3">
         <li>

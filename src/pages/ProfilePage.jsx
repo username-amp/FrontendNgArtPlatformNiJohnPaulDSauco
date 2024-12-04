@@ -113,7 +113,7 @@ const ProfilePage = () => {
 
    
     return displayPosts.length > 0 ? (
-        <div className="columns-2 sm:columns-3 lg:columns-5 xl:columns-7 gap-0 px-4">
+        <div className="columns-2 sm:columns-3 lg:columns-5 xl:columns-7 gap-0 px-0">
             {/* Back Button with left arrow icon */}
       <button
         className="absolute top-4 left-4 text-gray-600 hover:text-black"
@@ -138,7 +138,7 @@ const ProfilePage = () => {
                 />
               )}
               <div className="absolute inset-0 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-all duration-300">
-                <div className="rounded-full w-14 h-14 bg-gray-200 flex items-center justify-center text-xl font-bold text-black">
+                <div className="rounded-full w-14 h-14 bg-gray-300 flex items-center justify-center text-xl font-bold text-black">
                   {post.author_id?.username?.charAt(0)?.toUpperCase() || "?"}
                 </div>
                 <span className="mt-2 text-white font-medium text-lg">
@@ -154,8 +154,8 @@ const ProfilePage = () => {
     };
   
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-        <div className="w-full max-w-5xl bg-white  rounded-lg p-6">
+      <div className="max-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
+        <div className="w-full max-w-8xl bg-white  rounded-lg p-6">
           {/* Profile Section */}
           <div className="flex flex-col items-center">
             <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
@@ -175,7 +175,7 @@ const ProfilePage = () => {
               {user.username}
             </h1>
             <p className="text-gray-500">{user.email}</p>
-            <p className="mt-2 text-sm text-gray-600">{user.bio}</p>
+            <p className="mt-2 text-sm text-gray-600">"{user.bio}"</p>
             <div className="mt-4 flex space-x-6 text-sm text-gray-600">
               <span>Posts: {userPostsCount}</span>
               <span>Followers: {user.followers}</span>

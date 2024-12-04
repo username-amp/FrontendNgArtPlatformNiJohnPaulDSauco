@@ -11,7 +11,7 @@ import FollowButton from './FollowButton';
 const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getTokenFromCookies = () => {
     const cookies = document.cookie.split('; ');
@@ -24,8 +24,20 @@ const PostPage = () => {
     return null;
   };
 
-  useEffect(() => {
+  const getLoggedInUser = () => {
+    const token = getTokenFromCookies();
+    if (!token) return null;
 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload._id;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
     const fetchPost = async () => {
       const token = getTokenFromCookies();
       if (!token) {
@@ -55,10 +67,19 @@ const PostPage = () => {
     return <div className="text-center text-xl">Loading...</div>;
   }
 
-  const { username, profile_picture, category } = post.author_id || {};
+  const { username, profile_picture, category, _id: authorId } = post.author_id || {};
+  const loggedInUser = getLoggedInUser();
+
+  const handleProfileClick = () => {
+    if (loggedInUser === authorId) {
+      navigate('/profile');
+    } else {
+      navigate(`/profile/${authorId}`);
+    }
+  };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-8"> {/* Larger page layout */}
+    <div className="max-w-screen-xl mx-auto p-8">
       {/* Back Button with left arrow icon */}
       <button
         className="absolute top-4 left-4 text-gray-600 hover:text-black"
@@ -67,10 +88,10 @@ const PostPage = () => {
         <ArrowLeftIcon className="w-10 h-10" />
       </button>
 
-      <div className="bg-white  p-8 relative overflow-hidden"> {/* Larger padding and shadow */}
+      <div className="bg-white p-8 relative overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Left: Image Section */}
-          <div className="w-full md:w-1/2 flex items-center justify-center  p-4">
+          <div className="w-full md:w-1/2 flex items-center justify-center p-4">
             {post.image_url.length > 0 && (
               <img
                 src={`http://localhost:8002${post.image_url[0]}`}
@@ -82,7 +103,6 @@ const PostPage = () => {
 
           {/* Right: Post Details Section */}
           <div className="w-full md:w-1/2 p-8 flex flex-col space-y-6">
-
             {/* Like and Save Buttons */}
             <div className="flex gap-6 mb-0">
               <LikeButton
@@ -94,7 +114,6 @@ const PostPage = () => {
                 postId={post._id}
                 userId={post.author_id?._id || post.author_id}
               />
-
               <FollowButton
                 authorId={post.author_id?._id || post.author_id}
               />
@@ -106,21 +125,28 @@ const PostPage = () => {
                 <img
                   src={`http://localhost:8002${profile_picture}`}
                   alt={username}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                  onClick={handleProfileClick}
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white">
-                  {username?.charAt(0).toUpperCase()} {/* Display first letter of username */}
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white cursor-pointer"
+                  onClick={handleProfileClick}
+                >
+                  {username?.charAt(0).toUpperCase()}  {/* Display first letter of username */}
                 </div>
               )}
-              <p className="text-gray-500 text-sm">
+              <p
+                className="text-gray-500 text-sm cursor-pointer"
+                onClick={handleProfileClick}
+              >
                 <span className="font-semibold">{username}</span> on{" "}
                 {new Date(post.createdAt).toLocaleString()}
               </p>
             </div>
 
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h2> {/* Larger title */}
-            <p className="text-xl text-gray-600 mb-4">{post.description}</p> {/* Larger description */}
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h2>
+            <p className="text-xl text-gray-600 mb-4">{post.description}</p>
 
             {/* Comments Section */}
             <div className="mt-auto max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
@@ -135,14 +161,13 @@ const PostPage = () => {
 
       </div>
 
-      
       <div className="mt-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-4">Related Posts</h3>
         <RelatedPosts categoryId={post.category} currentPostId={post._id} />
       </div>
- 
     </div>
   );
 };
 
 export default PostPage;
+

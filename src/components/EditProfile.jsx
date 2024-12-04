@@ -7,17 +7,15 @@ const EditProfile = () => {
     username: '',
     email: '',
     bio: '',
-    profile_picture: '',
-    cover_photo: '',
+    profile_picture: null,
+    cover_photo: null,
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get('http://localhost:8002/api/v2/auth/profile', {
-        withCredentials: true,
-      })
+      .get('http://localhost:8002/api/v2/auth/profile', { withCredentials: true })
       .then((response) => {
         const { username, email, bio, profile_picture, cover_photo } = response.data.user;
         setFormData({
@@ -35,19 +33,45 @@ const EditProfile = () => {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      if (files[0] && !files[0].type.startsWith('image/')) {
+        setError('Only image files are allowed for profile and cover photos.');
+        return;
+      }
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const updateData = new FormData();
+    updateData.append('username', formData.username);
+    updateData.append('email', formData.email);
+    updateData.append('bio', formData.bio);
+  
+    console.log('Form data being sent:', formData);
+  
+    if (formData.profile_picture) {
+      updateData.append('profile_picture', formData.profile_picture);
+      console.log('Appended profile_picture:', formData.profile_picture);
+    }
+  
+    if (formData.cover_photo) {
+      updateData.append('cover_photo', formData.cover_photo);
+      console.log('Appended cover_photo:', formData.cover_photo);
+    }
+  
     try {
       const response = await axios.put(
         'http://localhost:8002/api/v2/auth/update-profile',
-        formData,
+        updateData,
         {
           headers: {
             Authorization: `Bearer ${document.cookie.split('=')[1]}`,
+            'Content-Type': 'multipart/form-data',
           },
           withCredentials: true,
         }
@@ -61,6 +85,7 @@ const EditProfile = () => {
       setError(err.response?.data?.message || 'An error occurred while updating your profile.');
     }
   };
+  
 
   return (
     <div className="p-6">
@@ -105,24 +130,22 @@ const EditProfile = () => {
         </div>
 
         <div>
-          <label htmlFor="profile_picture" className="block text-sm font-medium">Profile Picture URL</label>
+          <label htmlFor="profile_picture" className="block text-sm font-medium">Profile Picture</label>
           <input
             id="profile_picture"
-            type="text"
+            type="file"
             name="profile_picture"
-            value={formData.profile_picture}
             onChange={handleInputChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
 
         <div>
-          <label htmlFor="cover_photo" className="block text-sm font-medium">Cover Photo URL</label>
+          <label htmlFor="cover_photo" className="block text-sm font-medium">Cover Photo</label>
           <input
             id="cover_photo"
-            type="text"
+            type="file"
             name="cover_photo"
-            value={formData.cover_photo}
             onChange={handleInputChange}
             className="w-full p-2 border border-gray-300 rounded"
           />

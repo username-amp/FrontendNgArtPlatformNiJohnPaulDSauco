@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const SignInPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const response = await fetch("http://localhost:8002/api/v2/auth/signin", {
         method: "POST",
@@ -15,23 +19,28 @@ const SignInPage = () => {
         body: JSON.stringify(form),
         credentials: "include",
       });
-  
+
       const result = await response.json();
+
       if (response.ok) {
         setMessage("Sign-in successful!");
+        const profileResponse = await axiosInstance.get("/auth/profile");
         navigate("/home");
+      } else if (response.status === 403) {
+        setMessage(result.message || "Your account is restricted due to violations. Please contact support.");
       } else {
         setMessage(result.error || "Sign-in failed. Try again.");
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="w-full max-w-md p-8 bg-white rounded-xl  ">
-        {/* Logo */}
+      <div className="w-full max-w-md p-8 bg-white rounded-xl">
         <div className="mb-6 flex justify-center">
           <img
             src="/src/assets/images/MUZEUMsignin.png"
@@ -40,12 +49,10 @@ const SignInPage = () => {
           />
         </div>
 
-        {/* Title */}
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
           Welcome Back to Your Account!
         </h1>
 
-        {/* Sign-in Form */}
         <form onSubmit={handleSignIn} className="space-y-4">
           <input
             type="email"
@@ -66,15 +73,33 @@ const SignInPage = () => {
           <button
             type="submit"
             className="w-full bg-black text-white p-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300"
+            disabled={isLoading}
           >
-            Sign In
+            {isLoading ? (
+              <span className="flex justify-center items-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                </svg>
+                Signing In...
+              </span>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
-        {/* Message Display */}
-        {message && <p className="text-center text-red-500 mt-4">{message}</p>}
+        {message && <p className="text-center text-green-500 mt-4">{message}</p>}
 
-        {/* Additional Links / Options */}
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Don't have an account?{" "}
@@ -87,30 +112,6 @@ const SignInPage = () => {
             <a href="/forgot-password" className="text-blue-600 hover:underline">
               Reset Password
             </a>
-          </p>
-        </div>
-
-        {/* Social Media Login (optional) */}
-        <div className="mt-6 flex justify-center space-x-4">
-          <button className="p-3 border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all">
-            <img src="/path/to/google-logo.png" alt="Google" className="w-6 h-6" />
-          </button>
-          <button className="p-3 border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all">
-            <img src="/path/to/facebook-logo.png" alt="Facebook" className="w-6 h-6" />
-          </button>
-        </div>
-
-        {/* Legal & Policy */}
-        <div className="mt-6 text-center text-xs text-gray-500">
-          <p>
-            By signing in, you agree to our{" "}
-            <a href="/terms-of-service" className="text-blue-600 hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="/privacy-policy" className="text-blue-600 hover:underline">
-              Privacy Policy
-            </a>.
           </p>
         </div>
       </div>

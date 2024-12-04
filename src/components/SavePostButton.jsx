@@ -34,7 +34,7 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
   useEffect(() => {
     const storedSaveStatus = localStorage.getItem(`saved-${userId}-${postId}`);
     setIsSaved(storedSaveStatus ? JSON.parse(storedSaveStatus) : false);
-    console.log("Current User ID:", userId);
+  
   }, [postId, userId]);
 
   const handleSavePost = async () => {

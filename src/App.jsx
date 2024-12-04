@@ -18,6 +18,9 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import RecoverPasswordPage from './pages/RecoverPasswordPage';
 import PostPage from './components/PostPage';
 import ProfilePage from './pages/ProfilePage';
+import OthersProfilePage from './pages/OthersProfilePage';
+import AccountViolation from './components/AccountViolation';
+import TermsAndAgreement from './components/TermsAndAgreement';
 
 const App = () => {
   return (
@@ -40,6 +43,7 @@ const App = () => {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/bin" element={<Bin />} />
           <Route path="/profile" element={<ProfilePage />} /> 
+          <Route path="/profile/:authorId" element={<OthersProfilePage />} />
 
         </Route>
 
@@ -47,6 +51,8 @@ const App = () => {
          
           <Route path="/settings/change-password" element={<ChangePasswordPage />} />
           <Route path="/settings/edit-profile" element={<EditProfile />} />
+          <Route path="/settings/account-violation" element={<AccountViolation />} />
+          <Route path="/settings/terms-agreement" element={<TermsAndAgreement />} />
         </Route>
       </Routes> 
   

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate function
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
@@ -16,6 +18,8 @@ const ForgotPasswordPage = () => {
       const result = await response.json();
       if (response.ok) {
         setMessage("Check your email for password reset instructions.");
+        // Navigate to /recover-password after successful request
+        setTimeout(() => navigate("/recover-password"), 2000); // Redirect after 2 seconds
       } else {
         setMessage(result.error || "Request failed. Try again.");
       }
@@ -60,7 +64,7 @@ const ForgotPasswordPage = () => {
         </form>
 
         {/* Message Display */}
-        {message && <p className="text-center text-red-500 mt-4">{message}</p>}
+        {message && <p className="text-center text-green-500 mt-4">{message}</p>}
 
         {/* Additional Links */}
         <div className="mt-6 text-center">

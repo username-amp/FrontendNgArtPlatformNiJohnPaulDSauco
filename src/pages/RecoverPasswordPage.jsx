@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate and Link
 
 const ResetPasswordPage = () => {
-  const [form, setForm] = useState({ password: "", confirmPassword: "" });
+  const [form, setForm] = useState({ email: "", code: "", password: "", confirmPassword: "" });
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -12,15 +14,22 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/reset-password", {
+      const response = await fetch("http://localhost:8002/api/v2/auth/recover-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          email: form.email,
+          code: form.code,
+          password: form.password,
+        }),
       });
 
       const result = await response.json();
       if (response.ok) {
         setMessage("Password reset successful! You can now sign in.");
+        setTimeout(() => {
+          navigate("/signin"); // Redirect to the sign-in page after 2 seconds
+        }, 2000);
       } else {
         setMessage(result.error || "Password reset failed. Try again.");
       }
@@ -49,6 +58,22 @@ const ResetPasswordPage = () => {
         {/* Reset Password Form */}
         <form onSubmit={handleResetPassword} className="space-y-4">
           <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Reset Code"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
+            value={form.code}
+            onChange={(e) => setForm({ ...form, code: e.target.value })}
+            required
+          />
+          <input
             type="password"
             placeholder="New Password"
             className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
@@ -73,7 +98,19 @@ const ResetPasswordPage = () => {
         </form>
 
         {/* Message Display */}
-        {message && <p className="text-center text-red-500 mt-4">{message}</p>}
+        {message && (
+          <div className="text-center mt-4">
+            <p className="text-green-500">{message}</p>
+            {message.includes("successful") && (
+              <Link
+                to="/signin"
+                className="text-blue-600 hover:underline mt-2 block"
+              >
+                Go to Sign In
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

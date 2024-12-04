@@ -5,75 +5,80 @@ const ChangePasswordPage = () => {
     oldPassword: "",
     newPassword: "",
   });
-  const [message, setMessage] = useState(null);
+  const [error, setError] = useState("");
 
-  const handleChangePassword = async (e) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
-      const { oldPassword, newPassword } = form;
-  
-      console.log('Request to change password...');
-  
-      const response = await fetch('http://localhost:8002/api/v2/auth/change-password', {
-        method: 'PUT',
+      const response = await fetch("http://localhost:8002/api/v2/auth/change-password", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ oldPassword, newPassword }),
-        credentials: 'include',
+        body: JSON.stringify(form),
+        credentials: "include",
       });
-  
+
       const result = await response.json();
-      
-   
-      console.log('Password change response received.');
-      
+
       if (response.ok) {
-        setMessage('Password changed successfully');
+        alert("Password changed successfully!");
+        setForm({ oldPassword: "", newPassword: "" });
       } else {
-        setMessage(result.message || 'Failed to change password');
+        setError(result.message || "Failed to change password.");
       }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred. Please try again later.');
+    } catch (err) {
+      console.error("Error:", err);
+      setError("An error occurred. Please try again later.");
     }
   };
-  
-  
-  
-  
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Change Password</h1>
-        <form onSubmit={handleChangePassword} className="space-y-4">
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold mb-4">Change Password</h2>
+      {error && <p className="text-red-500">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="oldPassword" className="block text-sm font-medium">
+            Current Password
+          </label>
           <input
+            id="oldPassword"
             type="password"
-            placeholder="Enter current password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            name="oldPassword"
             value={form.oldPassword}
-            onChange={(e) => setForm({ ...form, oldPassword: e.target.value })}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded"
             required
           />
+        </div>
+
+        <div>
+          <label htmlFor="newPassword" className="block text-sm font-medium">
+            New Password
+          </label>
           <input
+            id="newPassword"
             type="password"
-            placeholder="Enter new password"
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            name="newPassword"
             value={form.newPassword}
-            onChange={(e) => setForm({ ...form, newPassword: e.target.value })}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded"
             required
           />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
-          >
+        </div>
+
+        <div>
+          <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
             Change Password
           </button>
-        </form>
-        {message && <p className="text-center mt-4">{message}</p>}
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
