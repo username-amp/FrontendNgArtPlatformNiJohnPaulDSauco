@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import badWordsList from "./badwords.json";
 import axiosInstance from "../utils/axiosInstance";
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 
 const CreatePostForm = ({ closeForm }) => {
   const navigate = useNavigate();
@@ -92,7 +91,6 @@ const CreatePostForm = ({ closeForm }) => {
         if (response.data.status) {
           console.log("Post created successfully:", response.data);
 
-          // Refetch the posts after post creation is successful
           try {
             const refetchResponse = await axios.get(
               "http://localhost:8002/api/v2/post/get-post/",
@@ -102,18 +100,14 @@ const CreatePostForm = ({ closeForm }) => {
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${token}`,
-                }}
+                },
+              }
             );
             console.log("Posts refetched:", refetchResponse.data);
-
-            // Optionally, you could store the fetched posts in the state and display them
-            // setPosts(refetchResponse.data.posts);
-
           } catch (refetchError) {
             console.error("Error fetching posts:", refetchError.message);
           }
 
-          navigate(0);
           closeForm();
         } else {
           setError(response.data.message || "Error creating post.");
@@ -121,7 +115,9 @@ const CreatePostForm = ({ closeForm }) => {
         }
       } catch (error) {
         console.error("Error:", error.message);
-        setError(error.response?.data?.message || "An unexpected error occurred.");
+        setError(
+          error.response?.data?.message || "An unexpected error occurred."
+        );
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -154,7 +150,9 @@ const CreatePostForm = ({ closeForm }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label className="block text-sm font-medium mb-1">
+              Description
+            </label>
             <textarea
               name="description"
               className="w-full px-3 py-2 border rounded-md"
@@ -166,7 +164,9 @@ const CreatePostForm = ({ closeForm }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Upload File</label>
+            <label className="block text-sm font-medium mb-1">
+              Upload File
+            </label>
             <input
               type="file"
               name="image_url"

@@ -1,12 +1,12 @@
-import React from 'react'
-import Test from '../components/Test'
+import React from "react";
+import Test from "../components/Test";
 
 const Gallery = () => {
   return (
     <div>
-        <Test />
+      <Test />
     </div>
-  )
-}
+  );
+};
 
-export default Gallery
+export default Gallery;

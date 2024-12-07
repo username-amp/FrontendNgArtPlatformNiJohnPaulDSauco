@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import LikeButton from './LikeButton';
-import CommentSection from './CommentSection';
-import SavePostButton from './SavePostButton';
-import RelatedPosts from './RelatedPosts';
-import FollowButton from './FollowButton';
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../utils/axiosInstance";
+import { useParams, useNavigate } from "react-router-dom";
+import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import LikeButton from "./LikeButton";
+import CommentSection from "./CommentSection";
+import SavePostButton from "./SavePostButton";
+import RelatedPosts from "./RelatedPosts";
+import FollowButton from "./FollowButton";
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -14,11 +14,11 @@ const PostPage = () => {
   const navigate = useNavigate();
 
   const getTokenFromCookies = () => {
-    const cookies = document.cookie.split('; ');
+    const cookies = document.cookie.split("; ");
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
-      if (cookie.startsWith('token=')) {
-        return decodeURIComponent(cookie.substring('token='.length));
+      if (cookie.startsWith("token=")) {
+        return decodeURIComponent(cookie.substring("token=".length));
       }
     }
     return null;
@@ -29,11 +29,38 @@ const PostPage = () => {
     if (!token) return null;
 
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       return payload._id;
     } catch (error) {
-      console.error('Error decoding token:', error);
+      console.error("Error decoding token:", error);
       return null;
+    }
+  };
+
+  const handleDeletePost = async () => {
+    const token = getTokenFromCookies();
+    if (!token) {
+      console.error("No token found in cookies");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.delete(
+        `/post/delete-post/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("do you want to delete the post");
+
+      if (response.data.message === "Post deleted successfully") {
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
     }
   };
 
@@ -41,14 +68,12 @@ const PostPage = () => {
     const fetchPost = async () => {
       const token = getTokenFromCookies();
       if (!token) {
-        console.error('No token found in cookies');
+        console.error("No token found in cookies");
         return;
       }
 
       try {
-        const response = await axios.get(`http://localhost:8002/api/v2/post/get-post/${postId}`, {
-          method: 'GET',
-          withCredentials: true,
+        const response = await axiosInstance.get(`/post/get-post/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,7 +81,7 @@ const PostPage = () => {
 
         setPost(response.data);
       } catch (error) {
-        console.error('Error fetching post:', error);
+        console.error("Error fetching post:", error);
       }
     };
 
@@ -67,12 +92,17 @@ const PostPage = () => {
     return <div className="text-center text-xl">Loading...</div>;
   }
 
-  const { username, profile_picture, category, _id: authorId } = post.author_id || {};
+  const {
+    username,
+    profile_picture,
+    category,
+    _id: authorId,
+  } = post.author_id || {};
   const loggedInUser = getLoggedInUser();
 
   const handleProfileClick = () => {
     if (loggedInUser === authorId) {
-      navigate('/profile');
+      navigate("/profile");
     } else {
       navigate(`/profile/${authorId}`);
     }
@@ -103,7 +133,7 @@ const PostPage = () => {
 
           {/* Right: Post Details Section */}
           <div className="w-full md:w-1/2 p-8 flex flex-col space-y-6">
-            {/* Like and Save Buttons */}
+            {/* Like, Save, Follow and Delete Buttons */}
             <div className="flex gap-6 mb-0">
               <LikeButton
                 postId={post._id}
@@ -114,9 +144,16 @@ const PostPage = () => {
                 postId={post._id}
                 userId={post.author_id?._id || post.author_id}
               />
-              <FollowButton
-                authorId={post.author_id?._id || post.author_id}
-              />
+              <FollowButton authorId={post.author_id?._id || post.author_id} />
+              {/* Delete Post Button */}
+              {loggedInUser === authorId && (
+                <button
+                  className="text-red-600 hover:text-red-800"
+                  onClick={handleDeletePost}
+                >
+                  <TrashIcon className="w-6 h-6" />
+                </button>
+              )}
             </div>
 
             <div className="flex items-center space-x-4 mb-4">
@@ -133,7 +170,8 @@ const PostPage = () => {
                   className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white cursor-pointer"
                   onClick={handleProfileClick}
                 >
-                  {username?.charAt(0).toUpperCase()}  {/* Display first letter of username */}
+                  {username?.charAt(0).toUpperCase()}{" "}
+                  {/* Display first letter of username */}
                 </div>
               )}
               <p
@@ -145,7 +183,9 @@ const PostPage = () => {
               </p>
             </div>
 
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h2>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">
+              {post.title}
+            </h2>
             <p className="text-xl text-gray-600 mb-4">{post.description}</p>
 
             {/* Comments Section */}
@@ -158,7 +198,6 @@ const PostPage = () => {
             </div>
           </div>
         </div>
-
       </div>
 
       <div className="mt-8">
@@ -170,4 +209,3 @@ const PostPage = () => {
 };
 
 export default PostPage;
-

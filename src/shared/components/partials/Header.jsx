@@ -1,26 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
-import { BsBell } from "react-icons/bs";
 import CreatePostForm from "../../../components/CreatePostForm";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { formatDistanceToNow } from "date-fns";
 import ProfilePopup from "../../../components/ProfilePopup";
-import EditProfile from "../../../components/EditProfile";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import SearchInput from "../../../components/SearchInput";
+import CategoriesButtons from "../../../components/CategoriesButton";
+import NotificationButton from "../../../components/NotificationButton"; // Import the new component
 
-const Header = ({ toggleSidebar }) => {
-  
+const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [user, setUser] = useState({ username: "", firstName: "", profilePicture: null });
+  const [user, setUser] = useState({
+    username: "",
+    firstName: "",
+    profile_Picture: null,
+  });
   const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryTitle) => {
+    navigate(`/filtered-post?query=${categoryTitle}`);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    console.log("Search initiated");
+
+    if (searchQuery) {
+      navigate(`/filtered-post?query=${searchQuery}`);
+    }
+  };
 
   const openForm = () => setIsFormVisible(true);
   const closeForm = () => setIsFormVisible(false);
@@ -75,18 +95,20 @@ const Header = ({ toggleSidebar }) => {
   const fetchUserData = async () => {
     const token = Cookies.get("token");
     if (!token) return;
-  
+
     try {
       const decodedToken = jwtDecode(token);
-      
-      const response = await axios.get("http://localhost:8002/api/v2/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-         
-        },
-        withCredentials: true
-      });
-  
+
+      const response = await axios.get(
+        "http://localhost:8002/api/v2/auth/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
       if (response.status === 200) {
         const { user } = response.data;
         setUser({
@@ -99,21 +121,16 @@ const Header = ({ toggleSidebar }) => {
       console.error("Error fetching user data:", error);
     }
   };
-  
 
   useEffect(() => {
     fetchCategories();
     fetchUserData();
   }, []);
 
-  const handleProfileUpdate = () => {
-    fetchUserData();
-  }
-
   return (
     <div className="flex flex-col w-full bg-white">
       {/* Top Section */}
-      <div className="relative flex justify-center items-center w-full bg-white  p-6 rounded-lg">
+      <div className="relative flex justify-center items-center w-full bg-white p-6 rounded-lg">
         {/* Logged-in User Greeting */}
         <div className="absolute left-6 text-md font-bold text-white whitespace-nowrap bg-black p-3 rounded-full">
           Hi, {user.username}!
@@ -126,9 +143,9 @@ const Header = ({ toggleSidebar }) => {
             Create
           </button>
           <div className="flex flex-col items-center w-fit h-fit">
-            <div className="w-32 sm:w-40 md:w-48 h-32 flex items-center justify-center rounded-full">
+            <div className="w-32 sm:w-40 md:w-80 h-32 flex items-center justify-center rounded-full">
               <img
-                src="/src/assets/images/MUZEUMlogo.png"
+                src="/src/assets/images/museo.png"
                 alt="logo"
                 className="w-[100%]"
               />
@@ -142,59 +159,45 @@ const Header = ({ toggleSidebar }) => {
           {isFormVisible && <CreatePostForm closeForm={closeForm} />}
         </div>
       </div>
-  
+
       {/* Middle Section */}
       <div className="flex flex-col sm:flex-row items-center w-full bg-gray-50 p-6 rounded-lg gap-6">
-        <button
-          className="relative flex items-center justify-center h-16 w-16 text-black rounded-full"
-          onClick={toggleDropdown}
-        >
-          <BsBell className="text-3xl" />
-          {isDropdownOpen && (
-            <div className="absolute top-16 left-0 bg-white shadow-lg rounded-lg p-4 w-72 z-50 max-h-96 overflow-y-auto">
-              <h3 className="font-semibold text-lg mb-2">Notifications</h3>
-              {loading ? (
-                <p>Loading...</p>
-              ) : notifications.length > 0 ? (
-                notifications.map((notif) => (
-                  <div key={notif._id} className="py-2 border-b">
-                    <p>{notif.message}</p>
-                    <p className="text-sm text-gray-500">
-                      {formatDistanceToNow(new Date(notif.createdAt), {
-                        addSuffix: true,
-                      })}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p>No new notifications</p>
-              )}
-            </div>
-          )}
-        </button>
-        <div className="flex w-full h-16 bg-black text-white rounded-full overflow-hidden pl-3 flex-grow items-center border-2 border-black">
-          <FaSearch className="text-white text-3xl mr-4" />
-          <input
-            type="text"
-            placeholder="Search art styles, artist, etc."
-            className="flex-grow px-4 py-4 text-black text-lg outline-none"
-          />
-        </div>
-        <div className="flex gap-2 overflow-x-auto sm:overflow-visible">
-          {error && <p className="text-red-500">{error}</p>}
-          {categories.slice(0, 5).map((category) => (
-            <button
-              key={category._id}
-              className="flex items-center justify-center h-16 px-6 bg-gray-600 text-white font-bold rounded-lg shadow-md hover:scale-105 transition-transform duration-300 ease-in-out whitespace-nowrap"
-            >
-              {category.title}
-            </button>
-          ))}
-        </div>
+        <NotificationButton toggleDropdown={toggleDropdown} />{" "}
+        {/* Notification Button */}
+        {isDropdownOpen && (
+          <div className="absolute top-72 left-0 bg-white shadow-lg rounded-lg p-4 w-72 z-50 max-h-96 overflow-y-auto">
+            <h3 className="font-semibold text-lg mb-2">Notifications</h3>
+            {loading ? (
+              <p>Loading...</p>
+            ) : notifications.length > 0 ? (
+              notifications.map((notif) => (
+                <div key={notif._id} className="py-2 border-b">
+                  <p>{notif.message}</p>
+                  <p className="text-sm text-gray-500">
+                    {formatDistanceToNow(new Date(notif.createdAt), {
+                      addSuffix: true,
+                    })}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No new notifications</p>
+            )}
+          </div>
+        )}
+        <SearchInput
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          onSearchClick={handleSearchClick}
+        />
+        <CategoriesButtons
+          categories={categories}
+          error={error}
+          onCategoryClick={handleCategoryClick}
+        />
       </div>
     </div>
   );
-  
 };
 
 export default Header;

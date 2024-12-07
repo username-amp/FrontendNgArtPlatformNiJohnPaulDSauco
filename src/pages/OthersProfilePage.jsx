@@ -18,7 +18,9 @@ const OthersProfilePage = () => {
 
     const fetchUserData = async () => {
       try {
-        const { data } = await axiosInstance.get(`/auth/author-profile-details/${authorId}`);
+        const { data } = await axiosInstance.get(
+          `/auth/author-profile-details/${authorId}`
+        );
         setUserData(data);
       } catch (err) {
         console.error("Error fetching user profile data:", err);
@@ -28,7 +30,9 @@ const OthersProfilePage = () => {
 
     const fetchPosts = async () => {
       try {
-        const { data } = await axiosInstance.get(`/post/get-all-posts-of-user-by-user-id/${authorId}`);
+        const { data } = await axiosInstance.get(
+          `/post/get-all-posts-of-user-by-user-id/${authorId}`
+        );
         setPosts(data.posts);
       } catch (err) {
         console.error("Error fetching user posts:", err);
@@ -37,7 +41,9 @@ const OthersProfilePage = () => {
 
     const fetchUserPostsCount = async () => {
       try {
-        const { data } = await axiosInstance.get(`/post/get-user-posts-count/${authorId}`);
+        const { data } = await axiosInstance.get(
+          `/post/get-user-posts-count/${authorId}`
+        );
         setUserPostsCount(data.postCount);
       } catch (err) {
         console.error("Error fetching user posts count:", err.response || err);
@@ -118,7 +124,7 @@ const OthersProfilePage = () => {
       <div className="w-full max-w-8xl bg-white rounded-lg p-6">
         <div className="flex flex-col items-center">
           {/* Profile Picture Section */}
-          <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold">
+          <div className="w-20 h-20 rounded-full bg-gray-500 flex items-center justify-center text-white text-3xl font-bold">
             {renderProfilePicture}
           </div>
 
@@ -126,7 +132,7 @@ const OthersProfilePage = () => {
             {user.username}
           </h1>
           <p className="text-gray-500">{user.email}</p>
-          
+
           <p className="mt-2 text-sm text-gray-600">"{user.bio}"</p>
           <div className="mt-4 flex space-x-6 text-sm text-gray-600">
             <span>Posts: {userPostsCount}</span>
@@ -142,7 +148,7 @@ const OthersProfilePage = () => {
               onClick={() => handleTabChange(tab)}
               className={`py-2 px-4 rounded-lg text-sm ${
                 activeTab === tab
-                  ? "bg-blue-500 text-white shadow-md"
+                  ? "bg-gray-500 text-white shadow-md"
                   : "bg-gray-200 text-gray-600"
               }`}
             >

@@ -20,11 +20,14 @@ const VerifyUserPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/verify-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code }),
-      });
+      const response = await fetch(
+        "http://localhost:8002/api/v2/auth/verify-user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code }),
+        }
+      );
 
       const result = await response.json();
       if (response.ok) {

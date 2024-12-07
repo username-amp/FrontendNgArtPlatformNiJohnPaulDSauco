@@ -57,9 +57,13 @@ const AccountViolation = () => {
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Account Violations</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        Account Violations
+      </h2>
       <p className="text-gray-600 mb-4">
-        You have a total of <span className="font-semibold">{violationCount}</span> violations on your account.
+        You have a total of{" "}
+        <span className="font-semibold">{violationCount}</span> violations on
+        your account.
       </p>
       {violations.length > 0 ? (
         <div className="overflow-x-auto">
@@ -68,8 +72,12 @@ const AccountViolation = () => {
               <tr>
                 <th className="text-left p-4 border-b border-gray-300">#</th>
                 <th className="text-left p-4 border-b border-gray-300">Date</th>
-                <th className="text-left p-4 border-b border-gray-300">Reason</th>
-                <th className="text-left p-4 border-b border-gray-300">Status</th>
+                <th className="text-left p-4 border-b border-gray-300">
+                  Reason
+                </th>
+                <th className="text-left p-4 border-b border-gray-300">
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -79,7 +87,9 @@ const AccountViolation = () => {
                   <td className="p-4 border-b border-gray-300">
                     {new Date(violation.date).toLocaleDateString()}
                   </td>
-                  <td className="p-4 border-b border-gray-300">{violation.reason}</td>
+                  <td className="p-4 border-b border-gray-300">
+                    {violation.reason}
+                  </td>
                   <td className="p-4 border-b border-gray-300">
                     <span
                       className={`px-2 py-1 rounded text-sm ${

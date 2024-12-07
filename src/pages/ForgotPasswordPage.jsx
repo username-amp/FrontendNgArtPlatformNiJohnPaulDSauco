@@ -9,11 +9,14 @@ const ForgotPasswordPage = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/forgot-password-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(
+        "http://localhost:8002/api/v2/auth/forgot-password-code",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       const result = await response.json();
       if (response.ok) {
@@ -64,7 +67,9 @@ const ForgotPasswordPage = () => {
         </form>
 
         {/* Message Display */}
-        {message && <p className="text-center text-green-500 mt-4">{message}</p>}
+        {message && (
+          <p className="text-center text-green-500 mt-4">{message}</p>
+        )}
 
         {/* Additional Links */}
         <div className="mt-6 text-center">

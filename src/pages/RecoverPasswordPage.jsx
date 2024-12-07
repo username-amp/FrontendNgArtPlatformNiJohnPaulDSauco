@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate and Link
 
 const ResetPasswordPage = () => {
-  const [form, setForm] = useState({ email: "", code: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState({
+    email: "",
+    code: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [message, setMessage] = useState(null);
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -14,15 +19,18 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/recover-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          code: form.code,
-          password: form.password,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8002/api/v2/auth/recover-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: form.email,
+            code: form.code,
+            password: form.password,
+          }),
+        }
+      );
 
       const result = await response.json();
       if (response.ok) {
@@ -86,7 +94,9 @@ const ResetPasswordPage = () => {
             placeholder="Confirm Password"
             className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.confirmPassword}
-            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, confirmPassword: e.target.value })
+            }
             required
           />
           <button

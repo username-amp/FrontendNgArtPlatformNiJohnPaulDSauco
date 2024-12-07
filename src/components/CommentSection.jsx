@@ -18,20 +18,24 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axiosInstance.get(`/interactions/comments/${postId}`);
+        const response = await axiosInstance.get(
+          `/interactions/comments/${postId}`
+        );
         console.log("Fetched Comments:", response.data.comments);
-        response.data.comments.forEach(comment => {
+        response.data.comments.forEach((comment) => {
           console.log("Comment User ID:", comment.user_id);
         });
         setComments(response.data.comments || []);
       } catch (err) {
-        console.error("Error fetching comments:", err.response?.data || err.message);
+        console.error(
+          "Error fetching comments:",
+          err.response?.data || err.message
+        );
         setError("Failed to load comments.");
       }
     };
     fetchComments();
   }, [postId]);
-  
 
   useEffect(() => {
     const token = getTokenFromCookies();
@@ -107,7 +111,6 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
     }
   };
 
-  // Handle edit comment
   const handleEdit = (commentId, currentContent) => {
     setEditingCommentId(commentId);
     setEditContent(currentContent);
@@ -116,11 +119,14 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
   const handleSaveEdit = async (commentId) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.put(`/interactions/edit-comment/${commentId}`, {
-        postId,
-        commentId,
-        newContent: editContent,
-      });
+      const response = await axiosInstance.put(
+        `/interactions/edit-comment/${commentId}`,
+        {
+          postId,
+          commentId,
+          newContent: editContent,
+        }
+      );
 
       if (response.status === 200) {
         setEditingCommentId(null);
@@ -135,14 +141,19 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
   };
 
   const handleDelete = async (commentId) => {
-    const confirmation = window.confirm("Are you sure you want to delete this comment?");
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
     if (!confirmation) return;
 
     setLoading(true);
     try {
-      const response = await axiosInstance.delete(`/interactions/delete-comment/${commentId}`, {
-        data: { postId, commentId },
-      });
+      const response = await axiosInstance.delete(
+        `/interactions/delete-comment/${commentId}`,
+        {
+          data: { postId, commentId },
+        }
+      );
 
       if (response.status === 200) {
         navigate(0);
@@ -162,10 +173,15 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
           <p className="text-gray-500">No comments yet.</p>
         ) : (
           comments.map((comment) => (
-            <div key={comment._id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg shadow-md">
+            <div
+              key={comment._id}
+              className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg shadow-md"
+            >
               <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0"></div>
               <div>
-                <p className="text-sm font-medium text-gray-800">{comment.authorUsername}</p>
+                <p className="text-sm font-medium text-gray-800">
+                  {comment.authorUsername}
+                </p>
                 {editingCommentId === comment._id ? (
                   <div className="edit-comment">
                     <textarea
@@ -180,7 +196,10 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
                     >
                       Save
                     </button>
-                    <button onClick={() => setEditingCommentId(null)} className="text-red-500 ml-2">
+                    <button
+                      onClick={() => setEditingCommentId(null)}
+                      className="text-red-500 ml-2"
+                    >
                       Cancel
                     </button>
                   </div>
@@ -188,28 +207,32 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
                   <p className="text-gray-600">{comment.content}</p>
                 )}
                 <p className="text-xs text-gray-500">
-                  {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : "Unknown date"}
+                  {comment.createdAt
+                    ? new Date(comment.createdAt).toLocaleString()
+                    : "Unknown date"}
                 </p>
                 <div className="mt-2 flex gap-3">
-                  {/* Debugging log: currentUserId vs comment.authorId */}
-                  {console.log("Current User ID:", currentUserId, "Comment Author ID:", comment.authorId)} 
-
                   {/* Show edit and delete buttons only if the current user is the comment's author */}
-                  {comment.user_id && String(currentUserId) === String(comment.user_id._id) && (
-                        <>
-                          <button onClick={() => handleEdit(comment._id, comment.content)} className="text-blue-500">
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(comment._id)}
-                            disabled={loading}
-                            className="text-red-500"
-                          >
-                            Delete
-                          </button>
-                        </>
-                      )}
-
+                  {comment.user_id &&
+                    String(currentUserId) === String(comment.user_id._id) && (
+                      <>
+                        <button
+                          onClick={() =>
+                            handleEdit(comment._id, comment.content)
+                          }
+                          className="text-blue-500"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(comment._id)}
+                          disabled={loading}
+                          className="text-red-500"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                 </div>
               </div>
             </div>

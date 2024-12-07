@@ -14,7 +14,9 @@ const CategoriesHome = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`Error: ${response.statusText || "Failed to fetch categories"}`);
+          throw new Error(
+            `Error: ${response.statusText || "Failed to fetch categories"}`
+          );
         }
 
         const data = await response.json();
@@ -23,7 +25,7 @@ const CategoriesHome = () => {
         const shuffled = data.sort(() => 0.5 - Math.random()).slice(0, 4);
         setShuffledCategories(shuffled);
       } catch (err) {
-        setError(err.message || "Failed to fetch categories");
+        setError(err.message || "Failed to fsetch categories");
       }
     };
 

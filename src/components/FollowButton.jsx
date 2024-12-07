@@ -23,10 +23,18 @@ const FollowButton = ({ authorId }) => {
   useEffect(() => {
     if (!loggedInUserId || loggedInUserId === authorId) return;
 
-    const followKey = `followed-${loggedInUserId}-${authorId}`;
-    const followStatus = localStorage.getItem(followKey);
+    const fetchFollowStatus = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/interactions/check-follow/${authorId}`
+        );
+        setIsFollowing(response.data.isFollowing);
+      } catch (error) {
+        console.error("Error fetching follow status:", error);
+      }
+    };
 
-    setIsFollowing(followStatus === "true");
+    fetchFollowStatus();
   }, [authorId, loggedInUserId]);
 
   const handleFollow = async () => {
@@ -41,11 +49,6 @@ const FollowButton = ({ authorId }) => {
     try {
       await axiosInstance.post(`/interactions/follow/${authorId}`);
       setIsFollowing(true);
-
-      const followKey = `followed-${loggedInUserId}-${authorId}`;
-      localStorage.setItem(followKey, "true");
-
-      console.log(`Followed user with ID: ${authorId}`);
     } catch (error) {
       console.error("Error following user:", error);
     } finally {
@@ -65,11 +68,6 @@ const FollowButton = ({ authorId }) => {
     try {
       await axiosInstance.post(`/interactions/unfollow/${authorId}`);
       setIsFollowing(false);
-
-      const followKey = `followed-${loggedInUserId}-${authorId}`;
-      localStorage.setItem(followKey, "false");
-
-      console.log(`Unfollowed user with ID: ${authorId}`);
     } catch (error) {
       console.error("Error unfollowing user:", error);
     } finally {

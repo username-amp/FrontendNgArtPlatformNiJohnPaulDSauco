@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import Header from '../partials/Header';
-import Sidebar from '../partials/Sidebar';
-import CreatePostForm from '../../../components/CreatePostForm';
-import axiosInstance from '../../../utils/axiosInstance';
-import{ jwtDecode } from 'jwt-decode';
+import React, { useState, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import CreatePostForm from "../../../components/CreatePostForm";
+import axiosInstance from "../../../utils/axiosInstance";
+import { jwtDecode } from "jwt-decode";
 
 const RootLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
-  const [warningMessage, setWarningMessage] = useState('');
+  const [warningMessage, setWarningMessage] = useState("");
   const [userId, setUserId] = useState(null);
   const [violations, setViolations] = useState(null);
   const navigate = useNavigate();
@@ -23,15 +21,15 @@ const RootLayout = () => {
 
   const getUserIdFromToken = () => {
     const token = document.cookie
-      .split(';')
-      .find((cookie) => cookie.trim().startsWith('token='));
+      .split(";")
+      .find((cookie) => cookie.trim().startsWith("token="));
     if (token) {
-      const tokenValue = token.split('=')[1];
+      const tokenValue = token.split("=")[1];
       try {
         const decodedToken = jwtDecode(tokenValue);
         return decodedToken._id;
       } catch (error) {
-        console.error('Error decoding token:', error);
+        console.error("Error decoding token:", error);
         return null;
       }
     }
@@ -43,8 +41,7 @@ const RootLayout = () => {
     if (userIdFromToken) {
       setUserId(userIdFromToken);
     } else {
-      // Redirect to sign-in page if no token is present or invalid
-      navigate('/signin');
+      navigate("/signin");
     }
   }, [navigate]);
 
@@ -52,25 +49,27 @@ const RootLayout = () => {
     if (userId) {
       const fetchUserViolations = async () => {
         try {
-          const response = await axiosInstance.get(`/users/${userId}/violations`);
+          const response = await axiosInstance.get(
+            `/users/${userId}/violations`
+          );
           const userViolations = response.data.violations;
           setViolations(userViolations);
 
           if (userViolations === 1) {
             setWarningMessage(
-              'You have 1 violation. Please adhere to the community guidelines.'
+              "You have 1 violation. Please adhere to the community guidelines."
             );
             setShowWarning(true);
           }
 
           if (userViolations === 2) {
             setWarningMessage(
-              'You have 2 violations. Further violations may result in a ban.'
+              "You have 2 violations. Further violations may result in a ban."
             );
             setShowWarning(true);
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         }
       };
 
@@ -81,10 +80,6 @@ const RootLayout = () => {
   return (
     <div className="flex h-screen bg-white">
       <div className="flex-1 flex flex-col w-full">
-        <header>
-          <Header toggleSidebar={toggleSidebar} />
-        </header>
-
         <main className="flex-1 bg-white w-full relative">
           <Outlet />
 

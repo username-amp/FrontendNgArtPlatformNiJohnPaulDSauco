@@ -27,7 +27,10 @@ const SignInPage = () => {
         const profileResponse = await axiosInstance.get("/auth/profile");
         navigate("/home");
       } else if (response.status === 403) {
-        setMessage(result.message || "Your account is restricted due to violations. Please contact support.");
+        setMessage(
+          result.message ||
+            "Your account is restricted due to violations. Please contact support."
+        );
       } else {
         setMessage(result.error || "Sign-in failed. Try again.");
       }
@@ -98,7 +101,9 @@ const SignInPage = () => {
           </button>
         </form>
 
-        {message && <p className="text-center text-green-500 mt-4">{message}</p>}
+        {message && (
+          <p className="text-center text-green-500 mt-4">{message}</p>
+        )}
 
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
@@ -109,7 +114,10 @@ const SignInPage = () => {
           </p>
           <p className="text-gray-600 text-sm mt-2">
             Forgot your password?{" "}
-            <a href="/forgot-password" className="text-blue-600 hover:underline">
+            <a
+              href="/forgot-password"
+              className="text-blue-600 hover:underline"
+            >
               Reset Password
             </a>
           </p>

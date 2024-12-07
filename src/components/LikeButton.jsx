@@ -17,12 +17,10 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
       if (token) {
         try {
           const decodedToken = jwtDecode(token);
-          const userLiked = postLikes.some((like) => like.user_id === decodedToken._id);
-          const storedLikeStatus = localStorage.getItem(
-            `liked-${decodedToken._id}-${postId}`
+          const userLiked = postLikes.some(
+            (like) => like.user_id === decodedToken._id
           );
-
-          setIsLiked(storedLikeStatus !== null ? JSON.parse(storedLikeStatus) : userLiked);
+          setIsLiked(userLiked);
         } catch (err) {
           console.error("Error decoding token:", err.message);
         }
@@ -40,6 +38,7 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
     try {
       const token = Cookies.get("token");
       const decodedToken = jwtDecode(token);
+
       const response = await axios.post(
         "http://localhost:8002/api/v2/interactions/like",
         { authorId: decodedToken._id, recipientId: authorId, postId },
@@ -48,7 +47,6 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
 
       setLikesCount(response.data.likes_count);
       setIsLiked(true);
-      localStorage.setItem(`liked-${decodedToken._id}-${postId}`, JSON.stringify(true));
     } catch (err) {
       console.error("Error liking post:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Failed to like the post.");
@@ -56,7 +54,6 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
       setIsLiking(false);
     }
   };
-
 
   const handleUnlike = async () => {
     if (isUnliking) return;
@@ -66,6 +63,7 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
     try {
       const token = Cookies.get("token");
       const decodedToken = jwtDecode(token);
+
       const response = await axios.post(
         "http://localhost:8002/api/v2/interactions/unlike",
         { authorId: decodedToken._id, recipientId: authorId, postId },
@@ -74,7 +72,6 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
 
       setLikesCount(response.data.likes_count);
       setIsLiked(false);
-      localStorage.setItem(`liked-${decodedToken._id}-${postId}`, JSON.stringify(false));
     } catch (err) {
       console.error("Error unliking post:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Failed to unlike the post.");
@@ -87,7 +84,9 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
     <div className="flex items-center gap-2">
       <button
         onClick={isLiked ? handleUnlike : handleLike}
-        className={`transition-all ${isLiked ? "text-red-500" : "text-gray-500"}`}
+        className={`transition-all ${
+          isLiked ? "text-red-500" : "text-gray-500"
+        }`}
         disabled={isLiking || isUnliking}
       >
         <HeartIcon className="w-6 h-6" />

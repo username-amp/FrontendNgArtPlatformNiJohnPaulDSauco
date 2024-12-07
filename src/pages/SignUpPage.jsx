@@ -24,15 +24,18 @@ const SignUpPage = () => {
     setIsLoading(true);
 
     try {
-      const signUpResponse = await fetch("http://localhost:8002/api/v2/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: form.username,
-          email: form.email,
-          password: form.password,
-        }),
-      });
+      const signUpResponse = await fetch(
+        "http://localhost:8002/api/v2/auth/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: form.username,
+            email: form.email,
+            password: form.password,
+          }),
+        }
+      );
 
       const signUpResult = await signUpResponse.json();
 
@@ -115,7 +118,9 @@ const SignUpPage = () => {
             placeholder="Confirm Password"
             className="w-full p-4 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg"
             value={form.confirmPassword}
-            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, confirmPassword: e.target.value })
+            }
             required
           />
           <button
@@ -148,7 +153,9 @@ const SignUpPage = () => {
 
         {/* Message Display */}
         {error && <p className="text-center text-red-500 mt-4">{error}</p>}
-        {message && <p className="text-center text-green-500 mt-4">{message}</p>}
+        {message && (
+          <p className="text-center text-green-500 mt-4">{message}</p>
+        )}
 
         {/* Additional Links / Options */}
         <div className="mt-6 text-center">
@@ -164,13 +171,17 @@ const SignUpPage = () => {
         <div className="mt-6 text-center text-xs text-gray-500">
           <p>
             By signing up, you agree to our{" "}
-            <a href="/terms-of-service" className="text-blue-600 hover:underline">
+            <a
+              href="/terms-of-service"
+              className="text-blue-600 hover:underline"
+            >
               Terms of Service
             </a>{" "}
             and{" "}
             <a href="/privacy-policy" className="text-blue-600 hover:underline">
               Privacy Policy
-            </a>.
+            </a>
+            .
           </p>
         </div>
       </div>

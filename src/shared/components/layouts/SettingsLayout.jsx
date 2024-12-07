@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import SettingsSidebar from '../../../components/SettingsSidebar';
-import { jwtDecode } from 'jwt-decode';
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import SettingsSidebar from "../../../components/SettingsSidebar";
+import { jwtDecode } from "jwt-decode";
 
 const SettingsLayout = () => {
   const navigate = useNavigate();
 
   const isTokenValid = () => {
     const token = document.cookie
-      .split(';')
-      .find((cookie) => cookie.trim().startsWith('token='));
+      .split(";")
+      .find((cookie) => cookie.trim().startsWith("token="));
     if (token) {
-      const tokenValue = token.split('=')[1];
+      const tokenValue = token.split("=")[1];
       try {
         jwtDecode(tokenValue); // Attempt to decode the token
         return true; // Token is valid
       } catch (error) {
-        console.error('Invalid token:', error);
+        console.error("Invalid token:", error);
         return false;
       }
     }
@@ -25,7 +25,7 @@ const SettingsLayout = () => {
 
   useEffect(() => {
     if (!isTokenValid()) {
-      navigate('/signin'); // Redirect to sign-in if token is invalid or missing
+      navigate("/signin"); // Redirect to sign-in if token is invalid or missing
     }
   }, [navigate]);
 

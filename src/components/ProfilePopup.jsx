@@ -33,7 +33,7 @@ const ProfilePopup = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("user_id");
-    
+
     localStorage.removeItem("profilePromptClosed");
 
     navigate("/signin");

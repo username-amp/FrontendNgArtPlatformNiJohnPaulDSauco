@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Header = () => {
   return (
@@ -24,9 +24,7 @@ const Header = () => {
       {/* Middle Section */}
       <div className="flex items-center w-full bg-gray-50 mt-6 p-4 rounded-lg shadow-md gap-4">
         {/* Bell Icon */}
-        <div className="flex items-center text-gray-500 text-2xl">
-          🔔
-        </div>
+        <div className="flex items-center text-gray-500 text-2xl">🔔</div>
 
         {/* Search Input */}
         <div className="flex bg-gray-200 rounded-md px-4 py-3 flex-grow">

@@ -1,14 +1,20 @@
-//import React from 'react'
+import React from "react";
 
-//const CategoriesButton = ({ label, onClick}) => {
-  //return (
-    //<button
-      //  onClick={onClick}
-      //  className='px-4 py-2 bg-red-800 text-white rouded-lg hover:bg-blue-600 transition-all w-3/6'
-  //  >
-    //    {label}
-   // </button>
- // )
-//}
+const CategoriesButtons = ({ categories, error, onCategoryClick }) => {
+  return (
+    <div className="flex gap-2 overflow-x-auto sm:overflow-visible">
+      {error && <p className="text-red-500">{error}</p>}
+      {categories.slice(0, 5).map((category) => (
+        <button
+          key={category._id}
+          onClick={() => onCategoryClick(category.title)}
+          className="flex items-center justify-center h-16 px-6 bg-black text-white font-bold rounded-lg shadow-md hover:scale-105 transition-transform duration-300 ease-in-out whitespace-nowrap"
+        >
+          {category.title}
+        </button>
+      ))}
+    </div>
+  );
+};
 
-//export default CategoriesButton
+export default CategoriesButtons;

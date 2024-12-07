@@ -17,7 +17,7 @@ const ViewPostPopup = ({ post, isOpen, onClose }) => {
       } transition-opacity duration-300`}
     >
       <div
-         className={`bg-white rounded-xl max-w-5xl w-full relative shadow-lg overflow-hidden flex transform transition-transform duration-300 ${
+        className={`bg-white rounded-xl max-w-5xl w-full relative shadow-lg overflow-hidden flex transform transition-transform duration-300 ${
           isOpen ? "animate-scale-in" : "animate-scale-out"
         }`}
       >
@@ -42,7 +42,9 @@ const ViewPostPopup = ({ post, isOpen, onClose }) => {
 
         {/* Right: Post Details Section */}
         <div className="w-1/2 p-6 flex flex-col">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4">{post.title}</h2>
+          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+            {post.title}
+          </h2>
           <p className="text-gray-500 mb-3">{post.description}</p>
           <p className="text-gray-400 text-sm mb-5">
             Posted by:{" "}

@@ -32,17 +32,26 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
   }
 
   useEffect(() => {
-    const storedSaveStatus = localStorage.getItem(`saved-${userId}-${postId}`);
-    setIsSaved(storedSaveStatus ? JSON.parse(storedSaveStatus) : false);
-  
+    const fetchSavedStatus = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8002/api/v2/interactions/saved-status/${postId}`,
+          {
+            params: { postId, userId },
+            withCredentials: true,
+          }
+        );
+        setIsSaved(response.data.isSaved);
+      } catch (err) {
+        console.error("Error fetching saved status:", err);
+        setError("Failed to load saved status.");
+      }
+    };
+
+    fetchSavedStatus();
   }, [postId, userId]);
 
   const handleSavePost = async () => {
-    if (!userId) {
-      setError("User not authenticated. Cannot save post.");
-      return;
-    }
-
     setLoading(true);
     try {
       const response = await axios.post(
@@ -58,7 +67,6 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
 
       if (response.status === 200) {
         setIsSaved(true);
-        localStorage.setItem(`saved-${userId}-${postId}`, true);
       }
     } catch (err) {
       setError("Failed to save post. Please try again.");
@@ -69,11 +77,6 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
   };
 
   const handleUnsavePost = async () => {
-    if (!userId) {
-      setError("User not authenticated. Cannot unsave post.");
-      return;
-    }
-
     setLoading(true);
     try {
       const response = await axios.delete(
@@ -89,7 +92,6 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
 
       if (response.status === 200) {
         setIsSaved(false);
-        localStorage.removeItem(`saved-${userId}-${postId}`);
       }
     } catch (err) {
       setError("Failed to unsave post. Please try again.");
@@ -108,9 +110,13 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
             disabled={loading}
             className="p-2 rounded-md hover:bg-gray-200 transition-all"
           >
-            <FontAwesomeIcon icon={faTrash} size="lg" className="text-red-500" />
+            <FontAwesomeIcon
+              icon={faTrash}
+              size="lg"
+              className="text-red-500"
+            />
           </button>
-          <span className="text-green-600 font-semibold">Saved</span> {/* Indication text */}
+          <span className="text-green-600 font-semibold">Saved</span>
         </div>
       ) : (
         <div className="flex items-center space-x-2">
@@ -119,7 +125,11 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
             disabled={loading}
             className="p-2 rounded-md hover:bg-gray-200 transition-all"
           >
-            <FontAwesomeIcon icon={faBookmark} size="lg" className="text-blue-500" />
+            <FontAwesomeIcon
+              icon={faBookmark}
+              size="lg"
+              className="text-blue-500"
+            />
           </button>
           <span className="text-gray-600">Save</span>
         </div>

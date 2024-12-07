@@ -15,14 +15,17 @@ const ChangePasswordPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8002/api/v2/auth/change-password", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:8002/api/v2/auth/change-password",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+          credentials: "include",
+        }
+      );
 
       const result = await response.json();
 
@@ -74,7 +77,10 @@ const ChangePasswordPage = () => {
         </div>
 
         <div>
-          <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <button
+            type="submit"
+            className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
             Change Password
           </button>
         </div>

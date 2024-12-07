@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const RelatedPosts = ({ categoryId, currentPostId }) => {
   const [relatedPosts, setRelatedPosts] = useState([]);
@@ -11,7 +11,7 @@ const RelatedPosts = ({ categoryId, currentPostId }) => {
         const response = await axios.get(
           `http://localhost:8002/api/v2/post/related-posts/${categoryId}`,
           {
-            method: 'GET',
+            method: "GET",
             withCredentials: true,
           }
         );
@@ -22,7 +22,7 @@ const RelatedPosts = ({ categoryId, currentPostId }) => {
 
         setRelatedPosts(filteredPosts || []);
       } catch (err) {
-        setError(err.message || 'Failed to fetch related posts');
+        setError(err.message || "Failed to fetch related posts");
       }
     };
 
@@ -43,7 +43,7 @@ const RelatedPosts = ({ categoryId, currentPostId }) => {
         <div
           key={post._id}
           className="relative p-1 bg-white shadow-md rounded-lg cursor-pointer overflow-hidden group"
-          onClick={() => window.location.href = `/post/${post._id}`} // Navigate to the post
+          onClick={() => (window.location.href = `/post/${post._id}`)} // Navigate to the post
         >
           {post.image_url?.length > 0 && (
             <img
@@ -52,16 +52,16 @@ const RelatedPosts = ({ categoryId, currentPostId }) => {
               className="w-full rounded-md object-contain group-hover:opacity-30 transition-opacity duration-300"
             />
           )}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-80"
-          >
+          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-80">
             <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-full text-xl font-bold text-black mb-2">
               {post.author_id?.username?.charAt(0)?.toUpperCase() ||
                 post.author_id?.firstname?.charAt(0)?.toUpperCase() ||
-                '?'}
+                "?"}
             </div>
             <span className="text-white text-xl font-semibold">
-              {post.author_id?.username || post.author_id?.firstname || 'Unknown'}
+              {post.author_id?.username ||
+                post.author_id?.firstname ||
+                "Unknown"}
             </span>
           </div>
         </div>
