@@ -21,7 +21,7 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
         const response = await axiosInstance.get(
           `/interactions/comments/${postId}`
         );
-        console.log("Fetched Comments:", response.data.comments);
+
         setComments(response.data.comments || []);
       } catch (err) {
         console.error(
@@ -39,7 +39,6 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
     if (token) {
       const decodedToken = jwtDecode(token);
       setCurrentUserId(decodedToken._id);
-      console.log("Current User ID from token:", decodedToken._id);
     } else {
       console.log("No token found");
     }
@@ -258,7 +257,7 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
         <button
           onClick={handleAddComment}
           disabled={isLoading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+          className="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
         >
           {isLoading ? "Posting..." : "Post"}
         </button>

@@ -10,7 +10,7 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(postLikes?.length || 0);
   const [usersWhoLiked, setUsersWhoLiked] = useState([]);
-  const [showLikesList, setShowLikesList] = useState(false); // State for hover
+  const [showLikesList, setShowLikesList] = useState(false);
 
   useEffect(() => {
     const initializeLikeStatus = () => {
@@ -31,20 +31,18 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
     initializeLikeStatus();
   }, [postLikes, postId]);
 
- const fetchUsersWhoLiked = async () => {
-   try {
-     const response = await axios.get(
-       `http://localhost:8002/api/v2/post/likes/${postId}`,
-       { withCredentials: true }
-     );
-     // Map over the response data and get the `user_id` from the `likes` array
-     setUsersWhoLiked(response.data.likes.map((like) => like.user_id)); // Extract user_id from likes
-   } catch (err) {
-     console.error("Error fetching users who liked the post:", err.message);
-   }
- };
+  const fetchUsersWhoLiked = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8002/api/v2/post/likes/${postId}`,
+        { withCredentials: true }
+      );
 
-
+      setUsersWhoLiked(response.data.likes.map((like) => like.user_id));
+    } catch (err) {
+      console.error("Error fetching users who liked the post:", err.message);
+    }
+  };
 
   const handleMouseEnter = () => {
     setShowLikesList(true);
@@ -128,13 +126,6 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
                 key={user.user_id}
                 className="text-gray-700 flex items-center gap-2"
               >
-                {user.profile_picture && (
-                  <img
-                    src={user.profile_picture}
-                    alt={user.username}
-                    className="w-6 h-6 rounded-full"
-                  />
-                )}
                 <span>{user.username}</span>
               </li>
             ))}

@@ -127,18 +127,17 @@ const Header = () => {
     fetchUserData();
   }, []);
 
- const handleNotificationClick = (post) => {
-   if (!post || !post._id) {
-     console.error("Invalid post object:", post);
-     return;
-   }
+  const handleNotificationClick = (post) => {
+    if (!post || !post._id) {
+      console.error("Invalid post object:", post);
+      return;
+    }
 
-   const postId = post._id; // Extract the _id from the post object
-   console.log("Notification clicked with postId:", postId);
+    const postId = post._id;
 
-   navigate(`/post/${postId}`); // Navigate using only the _id
-   setIsDropdownOpen(false); // Close the dropdown
- };
+    navigate(`/post/${postId}`);
+    setIsDropdownOpen(false);
+  };
 
   return (
     <div className="flex flex-col w-full bg-white">

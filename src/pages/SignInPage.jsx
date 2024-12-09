@@ -44,7 +44,7 @@ const SignInPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="w-full max-w-md p-8 bg-white rounded-xl ">
-        <div className=" flex justify-center mb-20">
+        <div className=" flex justify-center mb-6">
           <img
             src="/src/assets/images/museo.png"
             alt="MUZEUM Logo"

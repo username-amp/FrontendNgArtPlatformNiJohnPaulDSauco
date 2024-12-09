@@ -128,7 +128,7 @@ const SavePostButton = ({ postId, userId: propUserId }) => {
             <FontAwesomeIcon
               icon={faBookmark}
               size="lg"
-              className="text-blue-500"
+              className="text-gray-500"
             />
           </button>
           <span className="text-gray-600">Save</span>

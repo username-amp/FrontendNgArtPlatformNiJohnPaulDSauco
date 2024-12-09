@@ -84,7 +84,7 @@ const FollowButton = ({ authorId }) => {
       onClick={isFollowing ? handleUnfollow : handleFollow}
       disabled={loading || !loggedInUserId}
       className={`px-4 py-2 rounded-full ${
-        isFollowing ? "bg-red-500" : "bg-blue-500"
+        isFollowing ? "bg-red-500" : "bg-black"
       } text-white hover:opacity-90`}
     >
       {loading

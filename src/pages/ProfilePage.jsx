@@ -62,7 +62,6 @@ const ProfilePage = () => {
           const { data } = await axiosInstance.get(
             `/post/get-saved-posts/${userId}`
           );
-          console.log(data);
           setSavedPosts(data.savedPosts);
         } catch (err) {
           console.error("Error fetching saved posts:", err);
@@ -121,7 +120,6 @@ const ProfilePage = () => {
 
     return displayPosts.length > 0 ? (
       <div className="columns-2 sm:columns-3 lg:columns-5 xl:columns-7 gap-0 px-0">
-       
         {displayPosts.map((post) => (
           <div
             key={post._id}

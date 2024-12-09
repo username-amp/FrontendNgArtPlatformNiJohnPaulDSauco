@@ -10,7 +10,7 @@ const ArtsHome = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
   const [search, setSearch] = useState("");
-  const [filterType, setFilterType] = useState("recent"); // Default filter for recent posts
+  const [filterType, setFilterType] = useState("recent");
   const navigate = useNavigate();
 
   const fetchPosts = async () => {
@@ -25,14 +25,11 @@ const ArtsHome = () => {
 
       let sortedPosts = response.data;
 
-      // Sort posts locally based on filter
       if (filterType === "recent") {
-        // Sort by creation date in descending order (latest first)
         sortedPosts = sortedPosts.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
       } else if (filterType === "popular") {
-        // Assuming popularity is based on a "likes" field or similar
         sortedPosts = sortedPosts.sort((a, b) => b.likes - a.likes);
       }
 
@@ -78,7 +75,7 @@ const ArtsHome = () => {
     });
 
     socket.on("newPost", (newPost) => {
-      console.log("New post received:", newPost);
+   
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     });
 

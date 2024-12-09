@@ -14,19 +14,19 @@ const SettingsLayout = () => {
     if (token) {
       const tokenValue = token.split("=")[1];
       try {
-        jwtDecode(tokenValue); // Attempt to decode the token
-        return true; // Token is valid
+        jwtDecode(tokenValue);
+        return true;
       } catch (error) {
         console.error("Invalid token:", error);
         return false;
       }
     }
-    return false; // No token found
+    return false;
   };
 
   useEffect(() => {
     if (!isTokenValid()) {
-      navigate("/signin"); // Redirect to sign-in if token is invalid or missing
+      navigate("/signin");
     }
   }, [navigate]);
 
