@@ -20,6 +20,12 @@ export default {
           "100%": { transform: "scale(0.9)", opacity: "0" },
         },
       },
+
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        playfair: ["Playfair Display", "serif"],
+        nerko: ["Nerko One", "cursive"],
+      },
     },
   },
   plugins: [],
