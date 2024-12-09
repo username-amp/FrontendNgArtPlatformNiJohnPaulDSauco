@@ -22,9 +22,6 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
           `/interactions/comments/${postId}`
         );
         console.log("Fetched Comments:", response.data.comments);
-        response.data.comments.forEach((comment) => {
-          console.log("Comment User ID:", comment.user_id);
-        });
         setComments(response.data.comments || []);
       } catch (err) {
         console.error(
@@ -177,7 +174,18 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
               key={comment._id}
               className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg shadow-md"
             >
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0"></div>
+              {/* Display the user's profile picture */}
+              <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0">
+                {comment.profilePicture ? (
+                  <img
+                    src={`http://localhost:8002${comment.profilePicture}`}
+                    alt={comment.authorUsername}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-400 rounded-full"></div>
+                )}
+              </div>
               <div>
                 <p className="text-sm font-medium text-gray-800">
                   {comment.authorUsername}
@@ -212,7 +220,6 @@ const CommentSection = ({ postId, authorId, recipientId }) => {
                     : "Unknown date"}
                 </p>
                 <div className="mt-2 flex gap-3">
-                  {/* Show edit and delete buttons only if the current user is the comment's author */}
                   {comment.user_id &&
                     String(currentUserId) === String(comment.user_id._id) && (
                       <>

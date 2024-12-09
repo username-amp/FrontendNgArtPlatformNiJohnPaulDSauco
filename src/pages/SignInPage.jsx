@@ -43,12 +43,12 @@ const SignInPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="w-full max-w-md p-8 bg-white rounded-xl">
-        <div className="mb-6 flex justify-center">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl ">
+        <div className=" flex justify-center mb-20">
           <img
-            src="/src/assets/images/MUZEUMsignin.png"
+            src="/src/assets/images/museo.png"
             alt="MUZEUM Logo"
-            className="w-[50%] max-w-xs"
+            className="w-[80%]"
           />
         </div>
 

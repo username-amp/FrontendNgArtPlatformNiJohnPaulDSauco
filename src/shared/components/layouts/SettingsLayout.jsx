@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import SettingsSidebar from "../../../components/SettingsSidebar";
 import { jwtDecode } from "jwt-decode";
+import Header from "../partials/Header";
 
 const SettingsLayout = () => {
   const navigate = useNavigate();
@@ -30,14 +31,17 @@ const SettingsLayout = () => {
   }, [navigate]);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <SettingsSidebar />
+    <div>
+      <Header />
+      <div className="flex h-screen bg-gray-100">
+        {/* Sidebar */}
+        <SettingsSidebar />
 
-      {/* Main Content */}
-      <main className="flex-1 bg-white shadow-lg rounded-lg p-6">
-        <Outlet /> {/* This will render the child routes */}
-      </main>
+        {/* Main Content */}
+        <main className="flex-1 bg-white shadow-lg rounded-lg p-6 mt-10">
+          <Outlet /> {/* This will render the child routes */}
+        </main>
+      </div>
     </div>
   );
 };

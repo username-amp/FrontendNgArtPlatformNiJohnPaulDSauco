@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import CreatePostForm from "../../../components/CreatePostForm";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { formatDistanceToNow } from "date-fns";
 import ProfilePopup from "../../../components/ProfilePopup";
-import axios from "axios";
 import SearchInput from "../../../components/SearchInput";
 import CategoriesButtons from "../../../components/CategoriesButton";
-import NotificationButton from "../../../components/NotificationButton"; // Import the new component
+import NotificationButton from "../../../components/NotificationButton";
+import CreatePostForm from "../../../components/CreatePostForm";
+import axios from "axios";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -127,11 +127,23 @@ const Header = () => {
     fetchUserData();
   }, []);
 
+ const handleNotificationClick = (post) => {
+   if (!post || !post._id) {
+     console.error("Invalid post object:", post);
+     return;
+   }
+
+   const postId = post._id; // Extract the _id from the post object
+   console.log("Notification clicked with postId:", postId);
+
+   navigate(`/post/${postId}`); // Navigate using only the _id
+   setIsDropdownOpen(false); // Close the dropdown
+ };
+
   return (
     <div className="flex flex-col w-full bg-white">
       {/* Top Section */}
       <div className="relative flex justify-center items-center w-full bg-white p-6 rounded-lg">
-        {/* Logged-in User Greeting */}
         <div className="absolute left-6 text-md font-bold text-white whitespace-nowrap bg-black p-3 rounded-full">
           Hi, {user.username}!
         </div>
@@ -161,9 +173,8 @@ const Header = () => {
       </div>
 
       {/* Middle Section */}
-      <div className="flex flex-col sm:flex-row items-center w-full bg-gray-50 p-6 rounded-lg gap-6">
-        <NotificationButton toggleDropdown={toggleDropdown} />{" "}
-        {/* Notification Button */}
+      <div className="flex flex-col sm:flex-row items-center w-full bg-gray-50  px-4 pt-6 rounded-lg gap-6">
+        <NotificationButton toggleDropdown={toggleDropdown} />
         {isDropdownOpen && (
           <div className="absolute top-72 left-0 bg-white shadow-lg rounded-lg p-4 w-72 z-50 max-h-96 overflow-y-auto">
             <h3 className="font-semibold text-lg mb-2">Notifications</h3>
@@ -172,12 +183,19 @@ const Header = () => {
             ) : notifications.length > 0 ? (
               notifications.map((notif) => (
                 <div key={notif._id} className="py-2 border-b">
-                  <p>{notif.message}</p>
-                  <p className="text-sm text-gray-500">
-                    {formatDistanceToNow(new Date(notif.createdAt), {
-                      addSuffix: true,
-                    })}
-                  </p>
+                  {notif.post && (
+                    <div
+                      onClick={() => handleNotificationClick(notif.post)}
+                      className="cursor-pointer hover:underline text-blue-600"
+                    >
+                      <p>{notif.message}</p>
+                      <p className="text-sm text-gray-500">
+                        {formatDistanceToNow(new Date(notif.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (

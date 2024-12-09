@@ -7,10 +7,13 @@ import CommentSection from "./CommentSection";
 import SavePostButton from "./SavePostButton";
 import RelatedPosts from "./RelatedPosts";
 import FollowButton from "./FollowButton";
+import Modal from "./Modal"; // Import the Modal component
+import Header from "../shared/components/partials/Header";
 
 const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for managing modal visibility
   const navigate = useNavigate();
 
   const getTokenFromCookies = () => {
@@ -54,8 +57,6 @@ const PostPage = () => {
         }
       );
 
-      alert("do you want to delete the post");
-
       if (response.data.message === "Post deleted successfully") {
         navigate("/home");
       }
@@ -63,6 +64,9 @@ const PostPage = () => {
       console.error("Error deleting post:", error);
     }
   };
+
+  const openModal = () => setIsModalOpen(true); // Show the modal
+  const closeModal = () => setIsModalOpen(false); // Hide the modal
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -109,100 +113,114 @@ const PostPage = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-8">
-      {/* Back Button with left arrow icon */}
-      <button
-        className="absolute top-4 left-4 text-gray-600 hover:text-black"
-        onClick={() => navigate("/home")}
-      >
-        <ArrowLeftIcon className="w-10 h-10" />
-      </button>
+    <div>
+      <Header />
+      <div className="max-w-screen-xl mx-auto p-8">
+        {/* Back Button with left arrow icon */}
+        <button
+          className="absolute top-50 left-4 text-gray-600 hover:text-black"
+          onClick={() => navigate("/home")}
+        >
+          <ArrowLeftIcon className="w-10 h-10" />
+        </button>
 
-      <div className="bg-white p-8 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row">
-          {/* Left: Image Section */}
-          <div className="w-full md:w-1/2 flex items-center justify-center p-4">
-            {post.image_url.length > 0 && (
-              <img
-                src={`http://localhost:8002${post.image_url[0]}`}
-                alt={post.title}
-                className="max-w-full h-[500px] object-cover rounded-lg shadow-lg"
-              />
-            )}
-          </div>
-
-          {/* Right: Post Details Section */}
-          <div className="w-full md:w-1/2 p-8 flex flex-col space-y-6">
-            {/* Like, Save, Follow and Delete Buttons */}
-            <div className="flex gap-6 mb-0">
-              <LikeButton
-                postId={post._id}
-                postLikes={post.likes}
-                authorId={post.author_id?._id || post.author_id}
-              />
-              <SavePostButton
-                postId={post._id}
-                userId={post.author_id?._id || post.author_id}
-              />
-              <FollowButton authorId={post.author_id?._id || post.author_id} />
-              {/* Delete Post Button */}
-              {loggedInUser === authorId && (
-                <button
-                  className="text-red-600 hover:text-red-800"
-                  onClick={handleDeletePost}
-                >
-                  <TrashIcon className="w-6 h-6" />
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center space-x-4 mb-4">
-              {/* Display profile picture or default icon */}
-              {profile_picture ? (
+        <div className="bg-white p-8 relative overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            {/* Left: Image Section */}
+            <div className="w-full md:w-1/2 flex items-center justify-center p-4">
+              {post.image_url.length > 0 && (
                 <img
-                  src={`http://localhost:8002${profile_picture}`}
-                  alt={username}
-                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
-                  onClick={handleProfileClick}
+                  src={`http://localhost:8002${post.image_url[0]}`}
+                  alt={post.title}
+                  className="max-w-full h-[500px] object-cover rounded-lg shadow-lg"
                 />
-              ) : (
-                <div
-                  className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white cursor-pointer"
-                  onClick={handleProfileClick}
-                >
-                  {username?.charAt(0).toUpperCase()}{" "}
-                  {/* Display first letter of username */}
-                </div>
               )}
-              <p
-                className="text-gray-500 text-sm cursor-pointer"
-                onClick={handleProfileClick}
-              >
-                <span className="font-semibold">{username}</span> on{" "}
-                {new Date(post.createdAt).toLocaleString()}
-              </p>
             </div>
 
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              {post.title}
-            </h2>
-            <p className="text-xl text-gray-600 mb-4">{post.description}</p>
+            {/* Right: Post Details Section */}
+            <div className="w-full md:w-1/2 p-8 flex flex-col space-y-6">
+              {/* Like, Save, Follow and Delete Buttons */}
+              <div className="flex gap-6 mb-0">
+                <LikeButton
+                  postId={post._id}
+                  postLikes={post.likes}
+                  authorId={post.author_id?._id || post.author_id}
+                />
+                <SavePostButton
+                  postId={post._id}
+                  userId={post.author_id?._id || post.author_id}
+                />
+                <FollowButton
+                  authorId={post.author_id?._id || post.author_id}
+                />
+                {/* Delete Post Button */}
+                {loggedInUser === authorId && (
+                  <button
+                    className="text-red-600 hover:text-red-800"
+                    onClick={openModal} // Open the modal on click
+                  >
+                    <TrashIcon className="w-6 h-6" />
+                  </button>
+                )}
+              </div>
 
-            {/* Comments Section */}
-            <div className="mt-auto max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-              <CommentSection
-                postId={post._id}
-                authorId={post.author_id?._id || post.author_id}
-                recipientId={post.author_id?._id || post.author_id}
-              />
+              <div className="flex items-center space-x-4 mb-4">
+                {/* Display profile picture or default icon */}
+                {profile_picture ? (
+                  <img
+                    src={`http://localhost:8002${profile_picture}`}
+                    alt={username}
+                    className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                    onClick={handleProfileClick}
+                  />
+                ) : (
+                  <div
+                    className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white cursor-pointer"
+                    onClick={handleProfileClick}
+                  >
+                    {username?.charAt(0).toUpperCase()}{" "}
+                    {/* Display first letter of username */}
+                  </div>
+                )}
+                <p
+                  className="text-gray-500 text-sm cursor-pointer"
+                  onClick={handleProfileClick}
+                >
+                  <span className="font-semibold">{username}</span> on{" "}
+                  {new Date(post.createdAt).toLocaleString()}
+                </p>
+              </div>
+
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
+                {post.title}
+              </h2>
+              <p className="text-xl text-gray-600 mb-4">{post.description}</p>
+
+              {/* Comments Section */}
+              <div className="mt-auto max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                <CommentSection
+                  postId={post._id}
+                  authorId={post.author_id?._id || post.author_id}
+                  recipientId={post.author_id?._id || post.author_id}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-4">Related Posts</h3>
-        <RelatedPosts categoryId={post.category} currentPostId={post._id} />
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            Related Posts
+          </h3>
+          <RelatedPosts categoryId={post.category} currentPostId={post._id} />
+        </div>
+
+        {/* Modal for confirming delete */}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleDeletePost} // Confirm delete when clicked
+        />
       </div>
     </div>
   );

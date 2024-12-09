@@ -9,7 +9,8 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
   const [isUnliking, setIsUnliking] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(postLikes?.length || 0);
-  const [error, setError] = useState(null);
+  const [usersWhoLiked, setUsersWhoLiked] = useState([]);
+  const [showLikesList, setShowLikesList] = useState(false); // State for hover
 
   useEffect(() => {
     const initializeLikeStatus = () => {
@@ -30,10 +31,33 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
     initializeLikeStatus();
   }, [postLikes, postId]);
 
+ const fetchUsersWhoLiked = async () => {
+   try {
+     const response = await axios.get(
+       `http://localhost:8002/api/v2/post/likes/${postId}`,
+       { withCredentials: true }
+     );
+     // Map over the response data and get the `user_id` from the `likes` array
+     setUsersWhoLiked(response.data.likes.map((like) => like.user_id)); // Extract user_id from likes
+   } catch (err) {
+     console.error("Error fetching users who liked the post:", err.message);
+   }
+ };
+
+
+
+  const handleMouseEnter = () => {
+    setShowLikesList(true);
+    fetchUsersWhoLiked();
+  };
+
+  const handleMouseLeave = () => {
+    setShowLikesList(false);
+  };
+
   const handleLike = async () => {
     if (isLiking) return;
     setIsLiking(true);
-    setError(null);
 
     try {
       const token = Cookies.get("token");
@@ -48,8 +72,7 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
       setLikesCount(response.data.likes_count);
       setIsLiked(true);
     } catch (err) {
-      console.error("Error liking post:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Failed to like the post.");
+      console.error("Error liking post:", err.message);
     } finally {
       setIsLiking(false);
     }
@@ -58,7 +81,6 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
   const handleUnlike = async () => {
     if (isUnliking) return;
     setIsUnliking(true);
-    setError(null);
 
     try {
       const token = Cookies.get("token");
@@ -73,28 +95,52 @@ const LikeButton = ({ postId, postLikes, authorId }) => {
       setLikesCount(response.data.likes_count);
       setIsLiked(false);
     } catch (err) {
-      console.error("Error unliking post:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Failed to unlike the post.");
+      console.error("Error unliking post:", err.message);
     } finally {
       setIsUnliking(false);
     }
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <button
-        onClick={isLiked ? handleUnlike : handleLike}
-        className={`transition-all ${
-          isLiked ? "text-red-500" : "text-gray-500"
-        }`}
-        disabled={isLiking || isUnliking}
+    <div className="relative flex flex-col items-start mt-2">
+      <div
+        className="flex items-center gap-2"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <HeartIcon className="w-6 h-6" />
-      </button>
-      <p className={`text-sm ${isLiked ? "text-red-500" : "text-gray-700"}`}>
-        {likesCount} {likesCount === 1 ? "Like" : "Likes"}
-      </p>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        <button
+          onClick={isLiked ? handleUnlike : handleLike}
+          className={`transition-all ${
+            isLiked ? "text-red-500" : "text-gray-500"
+          }`}
+        >
+          <HeartIcon className="w-6 h-6" />
+        </button>
+        <p className="text-sm">
+          {likesCount} {likesCount === 1 ? "Like" : "Likes"}
+        </p>
+      </div>
+      {showLikesList && usersWhoLiked.length > 0 && (
+        <div className="absolute top-8 left-0 bg-white border border-gray-300 rounded shadow-lg p-2 w-48">
+          <ul className="text-sm">
+            {usersWhoLiked.map((user) => (
+              <li
+                key={user.user_id}
+                className="text-gray-700 flex items-center gap-2"
+              >
+                {user.profile_picture && (
+                  <img
+                    src={user.profile_picture}
+                    alt={user.username}
+                    className="w-6 h-6 rounded-full"
+                  />
+                )}
+                <span>{user.username}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

@@ -92,94 +92,109 @@ const EditProfile = () => {
     }
   };
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="username" className="block text-sm font-medium">
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+ return (
+   <div className="p-6 mt-10 bg-gray-50 shadow-md rounded-lg  mx-auto">
+     <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
+       Edit Profile
+     </h2>
+     {error && <p className="text-sm text-red-500 text-center mb-4">{error}</p>}
+     <form onSubmit={handleSubmit} className="space-y-4">
+       <div>
+         <label
+           htmlFor="username"
+           className="block text-sm font-medium text-gray-600"
+         >
+           Username
+         </label>
+         <input
+           id="username"
+           type="text"
+           name="username"
+           value={formData.username}
+           onChange={handleInputChange}
+           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+           required
+         />
+       </div>
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+       <div>
+         <label
+           htmlFor="email"
+           className="block text-sm font-medium text-gray-600"
+         >
+           Email
+         </label>
+         <input
+           id="email"
+           type="email"
+           name="email"
+           value={formData.email}
+           onChange={handleInputChange}
+           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+           required
+         />
+       </div>
 
-        <div>
-          <label htmlFor="bio" className="block text-sm font-medium">
-            Bio
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+       <div>
+         <label
+           htmlFor="bio"
+           className="block text-sm font-medium text-gray-600"
+         >
+           Bio
+         </label>
+         <textarea
+           id="bio"
+           name="bio"
+           value={formData.bio}
+           onChange={handleInputChange}
+           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+         />
+       </div>
 
-        <div>
-          <label
-            htmlFor="profile_picture"
-            className="block text-sm font-medium"
-          >
-            Profile Picture
-          </label>
-          <input
-            id="profile_picture"
-            type="file"
-            name="profile_picture"
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+       <div>
+         <label
+           htmlFor="profile_picture"
+           className="block text-sm font-medium text-gray-600"
+         >
+           Profile Picture
+         </label>
+         <input
+           id="profile_picture"
+           type="file"
+           name="profile_picture"
+           onChange={handleInputChange}
+           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+         />
+       </div>
 
-        <div>
-          <label htmlFor="cover_photo" className="block text-sm font-medium">
-            Cover Photo
-          </label>
-          <input
-            id="cover_photo"
-            type="file"
-            name="cover_photo"
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
+       <div>
+         <label
+           htmlFor="cover_photo"
+           className="block text-sm font-medium text-gray-600"
+         >
+           Cover Photo
+         </label>
+         <input
+           id="cover_photo"
+           type="file"
+           name="cover_photo"
+           onChange={handleInputChange}
+           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+         />
+       </div>
 
-        <div>
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Update Profile
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+       <div>
+         <button
+           type="submit"
+           className="w-full py-2 bg-gray-700 text-white rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
+         >
+           Update Profile
+         </button>
+       </div>
+     </form>
+   </div>
+ );
+
 };
 
 export default EditProfile;

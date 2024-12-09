@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import Header from "../shared/components/partials/Header";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -120,13 +121,7 @@ const ProfilePage = () => {
 
     return displayPosts.length > 0 ? (
       <div className="columns-2 sm:columns-3 lg:columns-5 xl:columns-7 gap-0 px-0">
-        {/* Back Button with left arrow icon */}
-        <button
-          className="absolute top-4 left-4 text-gray-600 hover:text-black"
-          onClick={() => navigate("/home")}
-        >
-          <ArrowLeftIcon className="w-10 h-10" />
-        </button>
+       
         {displayPosts.map((post) => (
           <div
             key={post._id}
@@ -160,54 +155,64 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-      <div className="w-full max-w-8xl bg-white  rounded-lg p-6">
-        {/* Profile Section */}
-        <div className="flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
-            {user.profilePicture ? (
-              <img
-                src={user.profilePicture}
-                alt="Profile"
-                className="w-full rounded-md object-contain group-hover:opacity-30 transition-opacity duration-300"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-500 flex items-center justify-center text-white text-3xl font-bold">
-                {user.username[0].toUpperCase()}
-              </div>
-            )}
+    <div>
+      <Header />
+      {/* Back Button with left arrow icon */}
+      <button
+        className="absolute top-72 left-4 text-gray-600 hover:text-black"
+        onClick={() => navigate("/home")}
+      >
+        <ArrowLeftIcon className="w-10 h-10" />
+      </button>
+      <div className="max-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
+        <div className="w-full max-w-8xl bg-white  rounded-lg p-6">
+          {/* Profile Section */}
+          <div className="flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
+              {user.profilePicture ? (
+                <img
+                  src={`http://localhost:8002${user.profilePicture}`}
+                  alt="Profile"
+                  className="w-full rounded-md object-contain group-hover:opacity-30 transition-opacity duration-300"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-500 flex items-center justify-center text-white text-3xl font-bold">
+                  {user.username[0].toUpperCase()}
+                </div>
+              )}
+            </div>
+            <h1 className="mt-4 text-xl font-semibold text-gray-700">
+              {user.username}
+            </h1>
+            <p className="text-gray-500">{user.email}</p>
+            <p className="mt-2 text-sm text-gray-600">"{user.bio}"</p>
+            <div className="mt-4 flex space-x-6 text-sm text-gray-600">
+              <span>Posts: {userPostsCount}</span>
+              <span>Followers: {user.followers}</span>
+              <span>Following: {user.following}</span>
+            </div>
           </div>
-          <h1 className="mt-4 text-xl font-semibold text-gray-700">
-            {user.username}
-          </h1>
-          <p className="text-gray-500">{user.email}</p>
-          <p className="mt-2 text-sm text-gray-600">"{user.bio}"</p>
-          <div className="mt-4 flex space-x-6 text-sm text-gray-600">
-            <span>Posts: {userPostsCount}</span>
-            <span>Followers: {user.followers}</span>
-            <span>Following: {user.following}</span>
+
+          {/* Tab Navigation */}
+          <div className="flex justify-center space-x-6 mt-8">
+            {["gallery", "saved", "liked"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`py-2 px-4 rounded-lg text-sm ${
+                  activeTab === tab
+                    ? "bg-gray-500 text-white shadow-md"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </div>
-        </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center space-x-6 mt-8">
-          {["gallery", "saved", "liked"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`py-2 px-4 rounded-lg text-sm ${
-                activeTab === tab
-                  ? "bg-gray-500 text-white shadow-md"
-                  : "bg-gray-200 text-gray-600"
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
+          {/* Posts */}
+          <div className="mt-8">{renderPosts()}</div>
         </div>
-
-        {/* Posts */}
-        <div className="mt-8">{renderPosts()}</div>
       </div>
     </div>
   );

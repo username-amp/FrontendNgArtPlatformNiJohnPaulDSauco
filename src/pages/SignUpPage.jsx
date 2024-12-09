@@ -74,11 +74,11 @@ const SignUpPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-gray-100 rounded-xl ">
         {/* Logo */}
-        <div className="mb-6 flex justify-center">
+        <div className=" flex justify-center p-6">
           <img
-            src="/src/assets/images/MUZEUMsignin.png"
+            src="/src/assets/images/museo.png"
             alt="MUZEUM Logo"
-            className="w-[40%] max-w-xs"
+            className="w-[80%] max-w-xs"
           />
         </div>
 
