@@ -167,21 +167,7 @@ const EditProfile = () => {
          />
        </div>
 
-       <div>
-         <label
-           htmlFor="cover_photo"
-           className="block text-sm font-medium text-gray-600"
-         >
-           Cover Photo
-         </label>
-         <input
-           id="cover_photo"
-           type="file"
-           name="cover_photo"
-           onChange={handleInputChange}
-           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
-         />
-       </div>
+     
 
        <div>
          <button

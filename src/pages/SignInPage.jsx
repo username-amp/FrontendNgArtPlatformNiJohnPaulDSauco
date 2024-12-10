@@ -23,7 +23,6 @@ const SignInPage = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage("Sign-in successful!");
         const profileResponse = await axiosInstance.get("/auth/profile");
         navigate("/home");
       } else if (response.status === 403) {
@@ -49,6 +48,7 @@ const SignInPage = () => {
             src="/src/assets/images/museo.png"
             alt="MUZEUM Logo"
             className="w-[80%]"
+            onClick={() => navigate("/")}
           />
         </div>
 
@@ -102,7 +102,7 @@ const SignInPage = () => {
         </form>
 
         {message && (
-          <p className="text-center text-green-500 mt-4">{message}</p>
+          <p className="text-center text-red-500 mt-4">{message}</p>
         )}
 
         <div className="mt-6 text-center">

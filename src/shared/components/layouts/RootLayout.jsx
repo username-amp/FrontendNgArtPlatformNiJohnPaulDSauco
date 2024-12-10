@@ -45,37 +45,7 @@ const RootLayout = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (userId) {
-      const fetchUserViolations = async () => {
-        try {
-          const response = await axiosInstance.get(
-            `/users/${userId}/violations`
-          );
-          const userViolations = response.data.violations;
-          setViolations(userViolations);
-
-          if (userViolations === 1) {
-            setWarningMessage(
-              "You have 1 violation. Please adhere to the community guidelines."
-            );
-            setShowWarning(true);
-          }
-
-          if (userViolations === 2) {
-            setWarningMessage(
-              "You have 2 violations. Further violations may result in a ban."
-            );
-            setShowWarning(true);
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      };
-
-      fetchUserViolations();
-    }
-  }, [userId]);
+  
 
   return (
     <div className="flex h-screen bg-white">
@@ -84,20 +54,7 @@ const RootLayout = () => {
           <Outlet />
 
           {/* Warning popup */}
-          {showWarning && (
-            <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-600 bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded shadow-lg">
-                <h3 className="text-xl font-bold">Warning!</h3>
-                <p className="mt-2">{warningMessage}</p>
-                <button
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-                  onClick={() => setShowWarning(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
+       
 
           {/* Show Create Post Form */}
           {isCreateFormOpen && (

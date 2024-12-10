@@ -79,6 +79,7 @@ const SignUpPage = () => {
             src="/src/assets/images/museo.png"
             alt="MUZEUM Logo"
             className="w-[80%] max-w-xs"
+            onClick={() => navigate("/")}
           />
         </div>
 
@@ -172,7 +173,7 @@ const SignUpPage = () => {
           <p>
             By signing up, you agree to our{" "}
             <a
-              href="/terms-of-service"
+              href="https://www.freeprivacypolicy.com/live/8ce060fe-0abf-4049-9c92-8047ff7f806c"
               className="text-blue-600 hover:underline"
             >
               Terms of Service
