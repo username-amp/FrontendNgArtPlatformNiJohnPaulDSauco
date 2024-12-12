@@ -1,7 +1,5 @@
-// src/store/index.js
 import { createStore } from "redux";
 
-// Initial state
 const initialState = {
   user: {
     username: "",
@@ -10,7 +8,6 @@ const initialState = {
   },
 };
 
-// Reducer function to update the user state
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_USER":
@@ -23,7 +20,6 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-// Create the Redux store
 const store = createStore(userReducer);
 
 export default store;
