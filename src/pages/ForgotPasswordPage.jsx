@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
@@ -21,8 +21,7 @@ const ForgotPasswordPage = () => {
       const result = await response.json();
       if (response.ok) {
         setMessage("Check your email for password reset instructions.");
-        // Navigate to /recover-password after successful request
-        setTimeout(() => navigate("/recover-password"), 2000); // Redirect after 2 seconds
+        setTimeout(() => navigate("/recover-password"), 2000);
       } else {
         setMessage(result.error || "Request failed. Try again.");
       }

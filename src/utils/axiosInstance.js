@@ -26,6 +26,7 @@ axiosInstance.interceptors.request.use(
     if (token) {
       req.headers.Authorization = `Bearer ${token}`;
     } else {
+      req.headers.Authorization = null;
     }
 
     return req;
