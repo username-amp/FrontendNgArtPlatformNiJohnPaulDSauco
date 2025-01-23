@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 
 const ForgotPasswordPage = () => {
@@ -10,7 +10,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8002/api/v2/auth/forgot-password-code",
+        "http://localhost:8003/api/v2/auth/forgot-password-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -27,7 +27,7 @@ const ForgotPasswordPage = () => {
         setMessage(result.error || "Request failed. Try again.");
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again later.");
+      setMessage("An error occurred. Please try again later.", error.message);
     }
   };
 
