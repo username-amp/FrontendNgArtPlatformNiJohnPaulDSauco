@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate and Link
 
 const ResetPasswordPage = () => {
@@ -42,7 +42,7 @@ const ResetPasswordPage = () => {
         setMessage(result.error || "Password reset failed. Try again.");
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again later.");
+      setMessage("An error occurred. Please try again later.", error.message);
     }
   };
 

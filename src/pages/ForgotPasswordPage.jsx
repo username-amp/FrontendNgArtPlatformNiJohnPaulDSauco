@@ -10,7 +10,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8003/api/v2/auth/forgot-password-code",
+        "http://localhost:802/api/v2/auth/forgot-password-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

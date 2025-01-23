@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import { FiFilter } from "react-icons/fi";
@@ -75,7 +75,6 @@ const ArtsHome = () => {
     });
 
     socket.on("newPost", (newPost) => {
-   
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     });
 
